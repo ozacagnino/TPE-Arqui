@@ -105,6 +105,7 @@ int main()
 	ncPrint("[Finished]");
 
 	ncEraseAll();
+	//hola
 
 	return 0;
 }
