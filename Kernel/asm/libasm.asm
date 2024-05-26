@@ -3,7 +3,7 @@ GLOBAL get_hours
 GLOBAL get_minutes
 GLOBAL get_seconds
 
-
+GLOBAL get_key
 
 section .text
 	
@@ -71,4 +71,18 @@ get_minutes:
 get_hours:
 	enter_func
 	get_rtc_value 04
+	leave_func
+
+
+get_key:
+	enter_func
+		xor rax, rax
+	.loop:
+		in al, 64h
+		and al, 1h
+		cmp al, 0
+		je .loop
+		jmp .fin
+	.fin:
+		in al, 60h
 	leave_func

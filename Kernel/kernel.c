@@ -4,6 +4,7 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <clock.h>
+#include <keyboardDriver.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -91,6 +92,7 @@ void * initializeKernelBinary()
 	// ncPrintBin(hours()); ncPrint(":"); ncPrintBin(minutes()); ncPrint(":"); ncPrintBin(seconds());
 	// ncNewline();
 
+	keyboard_handler();
 
 //HASTA ACA
 	ncNewline();
