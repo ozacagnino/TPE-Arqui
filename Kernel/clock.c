@@ -8,29 +8,32 @@
 #define YEAR 0x09
 #define MONTH 0x08
 #define DAY 0x07
-unsigned int RTC(unsigned char value);
+
+unsigned int get_seconds();
+unsigned int get_hours();
+unsigned int get_minutes();
 
 static unsigned int bcdToDec(unsigned char time){
     return (time << 4) * 10 + (time & 0x0F);
 }
 
 unsigned int seconds(){
-    return bcdToDec(RTC(SECONDS));
+    return get_seconds();
 }
 unsigned int minutes(){
-    return bcdToDec(RTC(MINUTES));
+    return get_minutes();
 }
 unsigned int hours(){
-    return bcdToDec(RTC(HOURS));
+    return get_hours();
 }
-unsigned int year(){
-    return bcdToDec(RTC(YEAR));
-}
+// unsigned int year(){
+//     return get;
+// }
 
-unsigned int month(){
-    return bcdToDec(RTC(MONTH));
-}
+// unsigned int month(){
+//     return (RTC(MONTH));
+// }
 
-unsigned int day(){
-    return bcdToDec(RTC(DAY));
-}
+// unsigned int day(){
+//     return (RTC(DAY));
+// }

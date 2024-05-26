@@ -16,7 +16,7 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
-
+#define GMT -3
 typedef int (*EntryPoint)();
 
 
@@ -78,13 +78,20 @@ void * initializeKernelBinary()
 	ncPrint("[Done]");
 	ncNewline();
 //ACA HAY COSAS NUESTRAS
-	ncPrint("DATE:");
-	ncPrintBin(day()); ncPrint("/"); ncPrintBin(month()); ncPrint("/"); ncPrintBin(year());
-	ncNewline();
-
 	ncPrint("TIME:");
-	ncPrintBin(hours()); ncPrint(":"); ncPrintBin(minutes()); ncPrint(":"); ncPrintBin(seconds());
-	ncNewline();
+	ncPrintBase(hours()+GMT, 10);
+	ncPrintChar(':');
+	ncPrintBase(minutes(), 10);
+	ncPrintChar(':');
+	ncPrintBase(seconds(), 10);
+	// ncPrintBin(day()); ncPrint("/"); ncPrintBin(month()); ncPrint("/"); ncPrintBin(year());
+	// ncNewline();
+
+	// ncPrint("TIME:");
+	// ncPrintBin(hours()); ncPrint(":"); ncPrintBin(minutes()); ncPrint(":"); ncPrintBin(seconds());
+	// ncNewline();
+
+
 //HASTA ACA
 	ncNewline();
 	ncNewline();
