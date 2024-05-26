@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <clock.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -76,6 +77,16 @@ void * initializeKernelBinary()
 
 	ncPrint("[Done]");
 	ncNewline();
+//ACA HAY COSAS NUESTRAS
+	ncPrint("DATE:");
+	ncPrintBin(day()); ncPrint("/"); ncPrintBin(month()); ncPrint("/"); ncPrintBin(year());
+	ncNewline();
+
+	ncPrint("TIME:");
+	ncPrintBin(hours()); ncPrint(":"); ncPrintBin(minutes()); ncPrint(":"); ncPrintBin(seconds());
+	ncNewline();
+//HASTA ACA
+	ncNewline();
 	ncNewline();
 	return getStackBase();
 }
@@ -104,7 +115,7 @@ int main()
 
 	ncPrint("[Finished]");
 
-	ncEraseAll();
+	//ncEraseAll();
 	//hola
 
 	return 0;
