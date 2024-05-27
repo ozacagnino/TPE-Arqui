@@ -102,30 +102,44 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	ncPrint("[Kernel Main]");
-	ncNewline();
-	ncPrint("  Sample code module at 0x");
-	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	ncNewline();
-	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	ncNewline();
-	ncNewline();
+	ncPrint("hola chicos");
+	// ncPrint("[Kernel Main]");
+	// ncNewline();
+	// ncPrint("  Sample code module at 0x");
+	// ncPrintHex((uint64_t)sampleCodeModuleAddress);
+	// ncNewline();
+	// ncPrint("  Calling the sample code module returned: ");
+	// ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
+	// ncNewline();
+	// ncNewline();
 
-	ncPrint("  Sample data module at 0x");
-	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	ncNewline();
-	ncPrint("  Sample data module contents: ");
-	ncPrint((char*)sampleDataModuleAddress);
-	ncNewline();
+	// ncPrint("  Sample data module at 0x");
+	// ncPrintHex((uint64_t)sampleDataModuleAddress);
+	// ncNewline();
+	// ncPrint("  Sample data module contents: ");
+	// ncPrint((char*)sampleDataModuleAddress);
+	// ncNewline();
 
-	ncPrintFormat("Arquitectura de Computadoras", (uint8_t)0xFA);
-	ncNewline();
+	// ncPrintFormat("Arquitectura de Computadoras", (uint8_t)0xFA);
+	// ncNewline();
 
-	ncPrint("[Finished]");
+	// ncPrint("[Finished]");
 
 	//ncEraseAll();
 	//hola
+
+	// ncNewline();
+	// while(1){
+	// 	ncPrint(tryKeyboard());
+
+	// }
+
+	// ncNewline();
+	// //que es esto que puso facu daun
+	// int key = get_key();
+	// ncPrint("Tecla: "); ncPrintHex(key);
+
+
 
 	return 0;
 }
