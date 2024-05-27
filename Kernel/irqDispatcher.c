@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stdint.h>
+#include <naiveConsole.h>
 
 static void int_20();
 
@@ -14,4 +15,5 @@ void irqDispatcher(uint64_t irq) {
 
 void int_20() {
 	timer_handler();
+	// ncPrint("timerTick_"); 
 }

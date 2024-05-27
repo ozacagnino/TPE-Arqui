@@ -5,6 +5,7 @@
 #include <naiveConsole.h>
 #include <clock.h>
 #include <keyboardDriver.h>
+#include <idtLoader.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -78,6 +79,7 @@ void * initializeKernelBinary()
 
 	ncPrint("[Done]");
 	ncNewline();
+	
 //ACA HAY COSAS NUESTRAS
 	ncPrint("TIME:");
 	ncPrintBase(hours()+GMT, 10);
@@ -92,7 +94,7 @@ void * initializeKernelBinary()
 	// ncPrintBin(hours()); ncPrint(":"); ncPrintBin(minutes()); ncPrint(":"); ncPrintBin(seconds());
 	// ncNewline();
 
-	keyboard_handler();
+	// keyboard_handler();
 
 //HASTA ACA
 	ncNewline();
@@ -102,44 +104,30 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	ncPrint("hola chicos");
-	// ncPrint("[Kernel Main]");
-	// ncNewline();
-	// ncPrint("  Sample code module at 0x");
-	// ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	// ncNewline();
-	// ncPrint("  Calling the sample code module returned: ");
-	// ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	// ncNewline();
-	// ncNewline();
+	load_idt();
+	ncPrint("[Kernel Main]");
+	ncNewline();
+	ncPrint("  Sample code module at 0x");
+	ncPrintHex((uint64_t)sampleCodeModuleAddress);
+	ncNewline();
+	ncPrint("  Calling the sample code module returned: ");
+	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
+	ncNewline();
+	ncNewline();
 
-	// ncPrint("  Sample data module at 0x");
-	// ncPrintHex((uint64_t)sampleDataModuleAddress);
-	// ncNewline();
-	// ncPrint("  Sample data module contents: ");
-	// ncPrint((char*)sampleDataModuleAddress);
-	// ncNewline();
+	ncPrint("  Sample data module at 0x");
+	ncPrintHex((uint64_t)sampleDataModuleAddress);
+	ncNewline();
+	ncPrint("  Sample data module contents: ");
+	ncPrint((char*)sampleDataModuleAddress);
+	ncNewline();
 
-	// ncPrintFormat("Arquitectura de Computadoras", (uint8_t)0xFA);
-	// ncNewline();
+	ncPrintFormat("Arquitectura de Computadoras", (uint8_t)0xFA);
+	ncNewline();
 
-	// ncPrint("[Finished]");
+	ncPrint("[Finished]");
 
-	//ncEraseAll();
-	//hola
-
-	// ncNewline();
-	// while(1){
-	// 	ncPrint(tryKeyboard());
-
-	// }
-
-	// ncNewline();
-	// //que es esto que puso facu daun
-	// int key = get_key();
-	// ncPrint("Tecla: "); ncPrintHex(key);
-
-
+	while(1);
 
 	return 0;
 }

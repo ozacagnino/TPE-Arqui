@@ -31,7 +31,7 @@ void load_idt() {
 	//Solo interrupcion timer tick habilitadas
 	picMasterMask(0xFE); 
 	picSlaveMask(0xFF);
-        
+
 	_sti();
 }
 
