@@ -7,7 +7,8 @@ void * memset(void * destination, int32_t character, uint64_t length);
 void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpuVendor(char *result);
-
-unsigned int get_key();
+uint64_t getSeconds();
+uint64_t getMinutes();
+uint64_t getHours();
 
 #endif

@@ -2,7 +2,7 @@
 
 static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 
-static char buffer[64] = {'0'};
+static char buffer[64] = { '0' };
 static uint8_t * const video = (uint8_t*)0xB8000;
 static uint8_t * currentVideo = (uint8_t*)0xB8000;
 static const uint32_t width = 80;
@@ -92,30 +92,4 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 	}
 
 	return digits;
-}
-
-//aca arranco EJ1:
-
-void ncPrintFormat(const char * string, uint8_t format)
-{
-    for (int i = 0; string[i]; i++){
-        ncPrintCharFormat(string[i], format);
-    }
-
-}
-
-void ncPrintCharFormat(char character, uint8_t format)
-{
-    *currentVideo++ = character;
-    *currentVideo++ = format;
-}
-
-void ncEraseAll(){ //esta es nuestra version del ncClear pero tambien borra los renglones que tenian otro formato.
-	currentVideo = video;
-	int i = 0;
-	for(i ; i < height * width * 2 ; i++){
-		*currentVideo++ = ' ';
-		*currentVideo++ = 0x0F;
-	}
-	currentVideo = video;
 }

@@ -12,10 +12,4 @@ void ncPrintBin(uint64_t value);
 void ncPrintBase(uint64_t value, uint32_t base);
 void ncClear();
 
-//arranco aca EJ1
-void ncPrintFormat(const char * string, uint8_t format);
-void ncPrintCharFormat(char character, uint8_t format);
-
-void ncEraseAll();
-
 #endif
