@@ -158,7 +158,7 @@ interrupt_keyboard:
 	mov [inforeg+5*8], rsi
 	mov [inforeg+6*8], rdi
 	mov [inforeg+7*8], rbp
-	;ov [inforeg+8*8], rsp
+	mov [inforeg+8*8], rsp
 	mov [inforeg+9*8], r8
 	mov [inforeg+10*8], r9
 	mov [inforeg+11*8], r10
@@ -202,9 +202,9 @@ interrupt_timerTick:
 exception_divideByZero:
 	saveRegistersException
 
-	mov rdi, 00h
-	mov rsi, regdata_exc
-	call exception_handler
+	mov rdi, 00h ;en rdi va el primer parametro por convencion
+	mov rsi, regdata_exc ;en rsi va el segundo
+	call exception_handler ;llamada a la funcion que maneja las excepciones (en C)
 
 
 ;ESTO HAY QUE MODIFICARLO
@@ -217,7 +217,7 @@ exception_invalidOpCode:
 
 
 ; syscalls params:	RDI	RSI	RDX	R10	R8	R9
-; C 	params   :	RDI RSI RDX RCX R8  R9
+; C 	params   :	RDI RSI RDX RCX R8  RAX
 interrupt_syscall:
 	mov rcx, r10
 	mov r9, rax
