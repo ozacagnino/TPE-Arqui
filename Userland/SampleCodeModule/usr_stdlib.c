@@ -159,7 +159,7 @@ static void set_screSize(){
 	scr_height = sys_scrHeight();
 }
 
-void fill_rect(int x, int y, int x2, int y2, Color color){
+void paintRectangle(int x, int y, int x2, int y2, Color color){
 	set_screSize();
 	if ( (x >= 0 && x+x2 < scr_width) && ((y >= 0 && y+y2 < scr_height)) ){
 		sys_fillRect  (x, y, x2, y2, color);

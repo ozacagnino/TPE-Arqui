@@ -64,7 +64,7 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
             } else if (game[i][j] == player->symbol) {
                 currentColor = player->playerColor;
             } 
-            fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
+            paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 }
@@ -84,24 +84,24 @@ void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
                 game[i][j] = ' ';
-                fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, BLACK);
+                paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, BLACK);
         }
     }
 }
 
 
 
-void input(struct Player *player,char s1, char s2, char s3, char s4) {
-    char ch;
-    ch = getChar();
+void readKeyboardInput(struct Player *player, char s1, char s2, char s3, char s4) {
+    char c;
+    c = getChar();
 
-    if (ch == s1 && player->direction != s2) {
+    if (c == s1 && player->direction != s2) {
         player->direction = s1;
-    } else if (ch == s2 && player->direction != s1) {
+    } else if (c == s2 && player->direction != s1) {
         player->direction = s2;
-    } else if (ch == s3 && player->direction != s4) {
+    } else if (c == s3 && player->direction != s4) {
         player->direction = s3;
-    } else if (ch == s4 && player->direction != s3) {
+    } else if (c == s4 && player->direction != s3) {
         player->direction = s4;
     }
 }
@@ -166,7 +166,7 @@ void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, ch
     printBoard(game, player);
 }
 
-void snakeGame() {
+void eliminatorGame() {
     char game[HEIGHT][WIDTH];
     
     struct Player player;
@@ -174,11 +174,11 @@ void snakeGame() {
     gameover = 0;
 
     while (!gameover) {
-        input(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
+        readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         wait(100);
     }
-    fill_rect(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
+    paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     prints("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
         continue;
@@ -244,29 +244,29 @@ void drawBoard2(char game[HEIGHT][WIDTH], struct Player *player1, struct Player 
             } else if (game[i][j] == player2->symbol) {
                 currentColor = player2->playerColor;
             } 
-            fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
+            paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 }
 
-void snakeGame2Players() {
+void eliminatorGame2Players() {
     char game[HEIGHT][WIDTH];
     startGame2Players(game, &player1, &player2);
     gameover = 0;
 
     while (!gameover) {
 
-        input(&player1, PLAYER1_UP, PLAYER1_DOWN, PLAYER1_LEFT, PLAYER1_RIGHT);
+        readKeyboardInput(&player1, PLAYER1_UP, PLAYER1_DOWN, PLAYER1_LEFT, PLAYER1_RIGHT);
         logic2(game, &player1, PLAYER1_UP, PLAYER1_DOWN, PLAYER1_LEFT, PLAYER1_RIGHT);
 
-        input(&player2, PLAYER2_UP, PLAYER2_DOWN, PLAYER2_LEFT, PLAYER2_RIGHT);
+        readKeyboardInput(&player2, PLAYER2_UP, PLAYER2_DOWN, PLAYER2_LEFT, PLAYER2_RIGHT);
         logic2(game, &player2, PLAYER2_UP, PLAYER2_DOWN, PLAYER2_LEFT, PLAYER2_RIGHT);
 
         drawBoard2(game, &player1, &player2);
         wait(100);
 
     }
-    fill_rect(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
+    paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     prints("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
         continue;
@@ -279,15 +279,15 @@ void snakeGame2Players() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int startSnake(int option) {
+int startEliminator(int option) {
     clear_scr();
 
     if (option == 1) {
         prints("\nModo 1 jugador\n", MAX_BUFFER);
-        snakeGame();
+        eliminatorGame();
     } else if (option == 2) {
         prints("\nModo 2 jugadores\n", MAX_BUFFER);
-        snakeGame2Players();
+        eliminatorGame2Players();
     } else {
         return 0;
     }

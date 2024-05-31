@@ -14,7 +14,7 @@ char parameter[MAX_BUFFER+1] = {0};
 char command[MAX_BUFFER+1] = {0};
 int linePos = 0;
 char lastc;													//eliminator
-const char * commands[] = {"undefined","help","time","clear","snake","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
+const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
 
 void showCommands(){
 	prints("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
@@ -45,7 +45,7 @@ static void cmd_undefined();
 static void cmd_help();
 static void cmd_time(); 
 static void cmd_clear();
-static void cmd_snake();
+static void cmd_eliminator();
 static void cmd_inforeg();
 static void cmd_zeroDiv();
 static void cmd_invOpcode();
@@ -53,7 +53,7 @@ static void cmd_charsizeplus();
 static void cmd_charsizeminus();
 
 
-static void (*commands_ptr[MAX_COMMANDS])() = {cmd_undefined, cmd_help, cmd_time, cmd_clear, cmd_snake, cmd_inforeg, cmd_zeroDiv,cmd_invOpcode,
+static void (*commands_ptr[MAX_COMMANDS])() = {cmd_undefined, cmd_help, cmd_time, cmd_clear, cmd_eliminator, cmd_inforeg, cmd_zeroDiv,cmd_invOpcode,
 											   cmd_charsizeplus,cmd_charsizeminus};
 
 
@@ -143,8 +143,8 @@ static void cmd_time(){
 }
 
 
-static void cmd_snake(){
-	if(!startSnake(charToInt(parameter))){
+static void cmd_eliminator(){
+	if(!startEliminator(charToInt(parameter))){
 		prints("\nParametro invalido. Utilice 'eliminator 1' o 'eliminator 2' para comenzar el juego\n",MAX_BUFFER);
 	}
 	

@@ -38,7 +38,7 @@ void printBase(uint64_t value, uint32_t base);
 void clear_scr();
 int getScreenWidth();
 int getScreenHeight();
-void fill_rect(int x, int y, int x2, int y2, Color color);
+void paintRectangle(int x, int y, int x2, int y2, Color color);
 void wait(uint64_t ms);
 void inforeg();
 void test_invopcode();

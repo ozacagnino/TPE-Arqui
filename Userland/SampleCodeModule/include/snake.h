@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-int startSnake(int option);
+int startEliminator(int option);
 
 #endif
