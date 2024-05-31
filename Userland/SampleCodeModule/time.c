@@ -22,11 +22,11 @@ void display_time(){
 	minutes = getMinutes();
 	seconds = getSeconds();
 	
-	printc('\n');
+	printChar('\n');
 	printHex(hours);
-	printc(':');
+	printChar(':');
 	printHex(minutes);
-	printc(':');
+	printChar(':');
 	printHex(seconds);
 }
 

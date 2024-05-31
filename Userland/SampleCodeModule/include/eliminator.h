@@ -1,5 +1,5 @@
-#ifndef SNAKE_H
-#define SNAKE_H
+#ifndef ELIMINATOR_H
+#define ELIMINATOR_H
 
 #include <stdint.h>
 

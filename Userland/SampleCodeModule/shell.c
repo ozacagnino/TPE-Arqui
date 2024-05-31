@@ -3,7 +3,7 @@
 #include <time.h>
 #include <sys_calls.h>
 #include <colores.h>
-#include "snake.h"
+#include "eliminator.h"
 #include "shell.h"
 
 #define MAX_BUFFER 254
@@ -17,15 +17,15 @@ char lastc;
 const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
 
 void showCommands(){
-	prints("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
-	prints("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
-	prints("\n-clear-              limpia la pantalla",MAX_BUFFER);
-	prints("\n-inforeg-            imprime los valores de los registros",MAX_BUFFER);
-	prints("\n-sizeplus-           aumenta el tamanio de letra",MAX_BUFFER);
-	prints("\n-sizeminus-          disminuye el tamanio de letra",MAX_BUFFER);
-	prints("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
-	prints("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
-	printc('\n');
+	printString("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
+	printString("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
+	printString("\n-clear-              limpia la pantalla",MAX_BUFFER);
+	printString("\n-inforeg-            imprime los valores de los registros",MAX_BUFFER);
+	printString("\n-sizeplus-           aumenta el tamanio de letra",MAX_BUFFER);
+	printString("\n-sizeminus-          disminuye el tamanio de letra",MAX_BUFFER);
+	printString("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
+	printString("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
+	printChar('\n');
 }
 
 // static Color BLACK = {0,0,0};
@@ -41,25 +41,25 @@ void showCommands(){
 static void newLine();
 static void printLine(char c);
 static int checkLine();
-static void cmd_undefined();
+static void undefinedCommand();
 static void helpCommand();
-static void cmd_time(); 
-static void cmd_clear();
-static void cmd_eliminator();
-static void cmd_inforeg();
-static void cmd_zeroDiv();
-static void cmd_invOpcode();
-static void cmd_charsizeplus();
-static void cmd_charsizeminus();
+static void timeCommand(); 
+static void clearCommand();
+static void eliminatorCommand();
+static void infoRegCommand();
+static void zeroDivisionCommand();
+static void invalidOpCodeCommand();
+static void upscaleCommand();
+static void downscaleCommand();
 
 
-static void (*commands_ptr[MAX_COMMANDS])() = {cmd_undefined, helpCommand, cmd_time, cmd_clear, cmd_eliminator, cmd_inforeg, cmd_zeroDiv,cmd_invOpcode,
-											   cmd_charsizeplus,cmd_charsizeminus};
+static void (*commands_ptr[MAX_COMMANDS])() = {undefinedCommand, helpCommand, timeCommand, clearCommand, eliminatorCommand, infoRegCommand, zeroDivisionCommand,invalidOpCodeCommand,
+											   upscaleCommand,downscaleCommand};
 
 
 void shell (){
 	char c;
-	prints("$ User> ",9);
+	printString("$ User> ",9);
 
 	while(1){
 		c = getChar();
@@ -71,9 +71,9 @@ static void printLine(char c){
 	if (linePos < MAX_BUFFER && c != lastc){
 		if (isChar(c) || c == ' ' ||isDigit(c)){
 			line[linePos++] = c;
-			printc(c);
+			printChar(c);
 		} else if (c == '\b' && linePos > 0){
-			printc(c);
+			printChar(c);
 			line[--linePos] = 0;
 		} else if (c == '\n'){
 			newLine();
@@ -96,9 +96,9 @@ static void newLine(){
 	linePos = 0;
 
 	if (i != 3 ){
-		prints("\n$ User> ",9);
+		printString("\n$ User> ",9);
 	} else {
-		prints("$ User> ",9);
+		printString("$ User> ",9);
 	}
 }
 
@@ -128,49 +128,49 @@ static int checkLine(){
 
 
 static void helpCommand(){
-	prints("\n---HELP---\n",MAX_BUFFER);
+	printString("\n---HELP---\n",MAX_BUFFER);
 	showCommands();
 }
 
-static void cmd_undefined(){
-	prints("\n\nNo se reconoce \"",MAX_BUFFER);
-	prints(command,MAX_BUFFER);
-	prints("\" como un comando valido, para ver los comandos disponibles escribir \"help\"\n",MAX_BUFFER);
+static void undefinedCommand(){
+	printString("\n\nNo se reconoce \"",MAX_BUFFER);
+	printString(command,MAX_BUFFER);
+	printString("\" como un comando valido, para ver los comandos disponibles escribir \"help\"\n",MAX_BUFFER);
 }
 
-static void cmd_time(){
+static void timeCommand(){
 	display_time();
 }
 
 
-static void cmd_eliminator(){
+static void eliminatorCommand(){
 	if(!startEliminator(charToInt(parameter))){
-		prints("\nParametro invalido. Utilice 'eliminator 1' o 'eliminator 2' para comenzar el juego\n",MAX_BUFFER);
+		printString("\nParametro invalido. Utilice 'eliminator 1' o 'eliminator 2' para comenzar el juego\n",MAX_BUFFER);
 	}
 	
 }
 
-static void cmd_clear(){
+static void clearCommand(){
 	clear_scr();
 }
 
-static void cmd_inforeg(){
+static void infoRegCommand(){
 	inforeg();
 }
 
-static void cmd_invOpcode(){
+static void invalidOpCodeCommand(){
 	test_invopcode();
 }
 
-static void cmd_zeroDiv(){
+static void zeroDivisionCommand(){
 	test_zerodiv();
 }
 
-static void cmd_charsizeplus(){
+static void upscaleCommand(){
 	increaseScale();
 }
 
-static void cmd_charsizeminus(){
+static void downscaleCommand(){
 	decreaseScale();
 }
 

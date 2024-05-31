@@ -135,21 +135,21 @@ interrupt_keyboard:
 	in al, 60h 		; 60 es el puerto del teclado AL : 8 bits
 	mov rdi, rax 	; recepcion del primer parametro
 
-	cmp al, 0x2A 	;left shift pressed
+	cmp al, 0x1D 	;control izquierdo apretado
 	jne .continue1
 	mov byte [left_shift], 1
 
 .continue1:
-	cmp al, 0xAA 	;left shift realesed
+	cmp al, 0x9D 	;control izquierdo liberado
 	jne .continue2
 	mov byte [left_shift], 0
 
-	;si estan apretados SHIFT+S se copian los registros en el vector regdataDump
+	;si estan apretados CONTROL + R se copian los registros en el vector regdataDump
 	;mover RSP a donde estaba antes de ser llamada la excepcion
 .continue2:
-	cmp byte [left_shift], 1 	; 's' pressed
+	cmp byte [left_shift], 1 	; 'r' pressed
 	jne .continue3
-	cmp al, 0x1F
+	cmp al, 0x13
 	jne .continue3
 
 	mov [inforeg+2*8], rbx

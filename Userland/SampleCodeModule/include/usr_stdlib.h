@@ -4,11 +4,11 @@
 #include <stdint.h>
 #include <colores.h>
 
-/* Prints a char in screen */
-void printc (char c);
+/* Printea un char en pantalla */
+void printChar (char c);
 
-/* Prints a string in screen */
-void prints (const char * str, int lenght);
+/* Printea un string en pantalla */
+void printString (const char * str, int lenght);
 
 /* Gets a single char from keyboard */
 char getChar();
@@ -16,7 +16,7 @@ char getChar();
 /*is c a char*/
 int isChar(char c);
 
-/*is digit??*/
+/*is digit*/
 int isDigit(char c);
 
 /* returns lenght of a string*/

@@ -1,11 +1,11 @@
-#include "snake.h"
+#include "eliminator.h"
 #include <usr_stdlib.h>
 #include <colores.h>
 #include "sys_calls.h"
 
 
 #define WIDTH 40
-#define HEIGHT 40
+#define HEIGHT 30
 #define MAXDIM 100
 
 static Color BLACK = {0,0,0};
@@ -32,6 +32,10 @@ static Color YELLOW = {30,224,255};
 
 static unsigned long int next = 1;
 int gameover;
+int scoreP0 = 0;
+int scoreP1 = 0;
+int scoreP2 = 0;
+int playersAmount = 0;
 
 struct Position {
     int i;
@@ -70,18 +74,18 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
 }
 
 void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
-    player->posX = WIDTH / 2;
-    player->posY = HEIGHT / 2;
     player->direction = PLAYER1_RIGHT;
-    player->alive = 1;
     player->symbol = '#';
     player->playerColor = BLUE;
-    player->length = 8;
+    player->posX = WIDTH / 2;
+    player->posY = HEIGHT / 2;
+    player->alive = 1;
+    player->length = 5;
 
     game[player->posY][player->posX] = player->symbol;
 
     int i, j;
-    for (i = 0; i < HEIGHT; i++) {
+    for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
                 game[i][j] = ' ';
                 paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, BLACK);
@@ -147,6 +151,13 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
     if (!player->alive) {
         gameover = 1;
         player->playerColor = BLACK;
+        if(playersAmount == 2){
+            if(player->symbol == '#'){
+                scoreP2++;
+            }else if(player->symbol == '@'){
+                scoreP1++;
+            }
+        }
     }
 
 
@@ -168,7 +179,7 @@ void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, ch
 
 void eliminatorGame() {
     char game[HEIGHT][WIDTH];
-    
+    scoreP0 = 0;
     struct Player player;
     startGame(game, &player);
     gameover = 0;
@@ -176,10 +187,12 @@ void eliminatorGame() {
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
+        scoreP0++;
+
         wait(100);
     }
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
-    prints("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
+    printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
         continue;
     }
@@ -196,20 +209,20 @@ struct Player player1;
 struct Player player2;
 
 void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
-    player1->posX = WIDTH / 4;
-    player1->posY = HEIGHT / 4;
     player1->direction = PLAYER1_DOWN;
-    player1->alive = 1;
     player1->symbol = '#';
     player1->playerColor = BLUE;
+    player1->posX = WIDTH / 4;
+    player1->posY = HEIGHT / 4;
+    player1->alive = 1;
     player1->length = 2;
 
-    player2->posX = 3 * WIDTH / 4;
-    player2->posY = 3 * HEIGHT / 4;
     player2->direction = PLAYER2_UP;
-    player2->alive = 1;
     player2->symbol = '@';
     player2->playerColor = ORANGE;
+    player2->posX = 3 * WIDTH / 4;
+    player2->posY = 3 * HEIGHT / 4;
+    player2->alive = 1;
     player2->length = 2;
 
     game[player1->posY][player1->posX] = player1->symbol;
@@ -217,7 +230,7 @@ void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct 
 
     // Inicializa el tablero
     int i, j;
-    for (i = 0; i < HEIGHT; i++) {
+    for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
             game[i][j] = ' ';
         }
@@ -267,7 +280,7 @@ void eliminatorGame2Players() {
 
     }
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
-    prints("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
+    printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
         continue;
     }
@@ -283,10 +296,10 @@ int startEliminator(int option) {
     clear_scr();
 
     if (option == 1) {
-        prints("\nModo 1 jugador\n", MAX_BUFFER);
+        printString("\nModo 1 jugador\n", MAX_BUFFER);
         eliminatorGame();
     } else if (option == 2) {
-        prints("\nModo 2 jugadores\n", MAX_BUFFER);
+        printString("\nModo 2 jugadores\n", MAX_BUFFER);
         eliminatorGame2Players();
     } else {
         return 0;

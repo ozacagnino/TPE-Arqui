@@ -15,13 +15,13 @@ int scr_width;
 
 static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base);
 
-void printc (char c){
+void printChar (char c){
 	sys_write(STDOUT, c);
 }
 
-void prints (const char * str, int lenght){
+void printString (const char * str, int lenght){
 	for (int i = 0 ; i < lenght && str[i] != 0 ; i++){
-		printc(str[i]);
+		printChar(str[i]);
 	}
 }
 
@@ -94,7 +94,7 @@ uint64_t charToInt(char* str){
 void printBase(uint64_t value, uint32_t base){
     uintToBase(value, buffer, base);
     for (int i = 0 ; buffer[i] != '\0' ; i++ ){
-        printc(buffer[i]);
+        printChar(buffer[i]);
     }
 }
 
@@ -194,22 +194,22 @@ void inforeg(){
 	uint64_t registers[17];
 	int i = sys_inforeg(registers);
 
-	printc('\n');	
+	printChar('\n');	
 	if (i == 1){
 		for (int i = 0; i < 17; i++) {
-        	prints(register_names[i],100);
-        	prints(": ",100);
+        	printString(register_names[i],100);
+        	printString(": ",100);
         	uint64ToHex(registers[i], hexbuf+2);
-        	prints(hexbuf,100);
+        	printString(hexbuf,100);
         	if (i % 4 == 3)
-            printc('\n');
+            printChar('\n');
         else
-            prints("   ",100);
+            printString("   ",100);
         }
 
 
     } else {
-		prints("\nTodavia no hay un snapshot de los registros, presione SHIFT + S para sacar una foto\n",100);
+		printString("\nTodavia no se capturaron los registros, presione CTRL + R para capturar\n",100);
 	}
 }
 
