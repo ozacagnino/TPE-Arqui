@@ -128,7 +128,7 @@ int getNextX(int dir, char s1, char s2, char s3, char s4){
 }
 
 
-void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2, char s3, char s4){
+void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2, char s3, char s4){
                                                                     //up    down    left     right
     player->posY += getNextY(player-> direction,s1,s2,s3,s4);
     player->posX += getNextX(player-> direction,s1,s2,s3,s4);
@@ -161,7 +161,7 @@ void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2,
 }
 
 void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, char s3, char s4) {
-    inLogic(game,player,s1,s2,s3,s4);
+    gameLogic(game,player,s1,s2,s3,s4);
 
     printBoard(game, player);
 }
@@ -227,7 +227,7 @@ void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct 
 }
 
 void logic2(char game[HEIGHT][WIDTH], struct Player *player,char s1,char s2,char s3,char s4) {
-    inLogic(game,player,s1,s2,s3,s4);
+    gameLogic(game,player,s1,s2,s3,s4);
 }
 
 

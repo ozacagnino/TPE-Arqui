@@ -13,7 +13,7 @@ char line[MAX_BUFFER+1] = {0}; //asi me aseguro que al menos va haber un cero
 char parameter[MAX_BUFFER+1] = {0};
 char command[MAX_BUFFER+1] = {0};
 int linePos = 0;
-char lastc;													//eliminator
+char lastc;
 const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
 
 void showCommands(){
@@ -21,10 +21,10 @@ void showCommands(){
 	prints("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
 	prints("\n-clear-              limpia la pantalla",MAX_BUFFER);
 	prints("\n-inforeg-            imprime los valores de los registros",MAX_BUFFER);
-	prints("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
-	prints("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
 	prints("\n-sizeplus-           aumenta el tamanio de letra",MAX_BUFFER);
 	prints("\n-sizeminus-          disminuye el tamanio de letra",MAX_BUFFER);
+	prints("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
+	prints("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
 	printc('\n');
 }
 
@@ -42,7 +42,7 @@ static void newLine();
 static void printLine(char c);
 static int checkLine();
 static void cmd_undefined();
-static void cmd_help();
+static void helpCommand();
 static void cmd_time(); 
 static void cmd_clear();
 static void cmd_eliminator();
@@ -53,7 +53,7 @@ static void cmd_charsizeplus();
 static void cmd_charsizeminus();
 
 
-static void (*commands_ptr[MAX_COMMANDS])() = {cmd_undefined, cmd_help, cmd_time, cmd_clear, cmd_eliminator, cmd_inforeg, cmd_zeroDiv,cmd_invOpcode,
+static void (*commands_ptr[MAX_COMMANDS])() = {cmd_undefined, helpCommand, cmd_time, cmd_clear, cmd_eliminator, cmd_inforeg, cmd_zeroDiv,cmd_invOpcode,
 											   cmd_charsizeplus,cmd_charsizeminus};
 
 
@@ -127,7 +127,7 @@ static int checkLine(){
 }
 
 
-static void cmd_help(){
+static void helpCommand(){
 	prints("\n---HELP---\n",MAX_BUFFER);
 	showCommands();
 }

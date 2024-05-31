@@ -1,6 +1,8 @@
 #include <sys_calls.h>
 #include <usr_stdlib.h>
 
+#define GMT -3
+
 int getHours(){
 	return sys_getHours();
 }
@@ -16,7 +18,7 @@ int getSeconds(){
 void display_time(){
 	int hours, minutes, seconds;
 
-	hours = getHours();
+	hours = getHours() + GMT;
 	minutes = getMinutes();
 	seconds = getSeconds();
 	
