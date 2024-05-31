@@ -18,8 +18,8 @@ extern Color BLACK;
 
 int size = 0;
 
-// #define SYS_CALLS_QTY 14
-#define SYS_CALLS_QTY 16
+// #define SYS_CALLS_NUM 14
+#define SYS_CALLS_NUM 16
 
 //llena buff con el caracter leido del teclado
 static uint64_t sys_read(uint64_t fd, char * buff){
@@ -158,7 +158,7 @@ static uint64_t (*syscall_handlers[])(uint64_t, uint64_t, uint64_t, uint64_t, ui
 // Devuelve la syscall correspondiente
 //                                rdi           rsi           rdx           rd10          r8           r9
 uint64_t syscall_handler(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
-    if (rax < SYS_CALLS_QTY && syscall_handlers[rax] != 0){
+    if (rax < SYS_CALLS_NUM && syscall_handlers[rax] != 0){
         return syscall_handlers[rax](rdi, rsi, rdx, r10, r8);
     }
 
