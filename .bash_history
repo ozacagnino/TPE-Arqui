@@ -4,3 +4,4 @@ make all
 cd ..
 make all
 exit
+exit

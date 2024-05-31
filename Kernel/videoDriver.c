@@ -261,8 +261,6 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 }
 
 
-
-
 //te paso una coordenada de la pantalla en (x,y) y te devuelvo la direccion de la pantalla que representa ese pixel
 static uint32_t* getPixelPtr(uint16_t x, uint16_t y) {
     uint8_t pixelwidth = screenInfo->bpp/8;     //la cantidad de bytes hasta el siguiente pixel a la derecha (bpp: BITS per px)

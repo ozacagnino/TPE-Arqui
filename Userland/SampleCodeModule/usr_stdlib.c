@@ -146,11 +146,11 @@ void clear_scr(){
 	sys_clear();
 }
 
-int get_scrWidht(){
+int getScreenWidth(){
 	return scr_width;
 }
 
-int get_scrHeight(){
+int getScreenHeight(){
 	return scr_height;
 }
 

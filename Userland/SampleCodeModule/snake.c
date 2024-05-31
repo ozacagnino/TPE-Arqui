@@ -3,13 +3,6 @@
 #include <colores.h>
 #include "sys_calls.h"
 
-static unsigned long int next = 1;
-
-// int rand() {
-//     next = next * 1103515245 + 12345;
-//     return (unsigned int)(next / 65536) % 32768;
-// }
-
 
 #define WIDTH 40
 #define HEIGHT 40
@@ -18,15 +11,12 @@ static unsigned long int next = 1;
 static Color BLACK = {0,0,0};
 static Color WHITE = {255,255,255};
 static Color RED = {0,0,255};
-static Color LIGHT_BLUE = {255,255,255};
 static Color BLUE = {255,0,0};
 static Color ORANGE = {16,160,255};
 static Color YELLOW = {30,224,255};
-static Color PURPLE = {255,32,160};
-static Color PINK = {100,0,244};
 
-#define PIXELWIDTH (get_scrWidht() / WIDTH)
-#define PIXELHEIGHT (get_scrHeight() / HEIGHT)
+#define PIXELWIDTH (getScreenWidth() / WIDTH)
+#define PIXELHEIGHT (getScreenHeight() / HEIGHT)
 #define MAX_BUFFER 254
 
 #define PLAYER1_UP 'w'
@@ -40,9 +30,8 @@ static Color PINK = {100,0,244};
 #define PLAYER2_RIGHT 'l'
 
 
+static unsigned long int next = 1;
 int gameover;
-int foodX, foodY;
-
 
 struct Position {
     int i;
@@ -50,30 +39,22 @@ struct Position {
 };
 
 struct Player {
-    int actualX;
-    int actualY;
-    int directionToGo;
-    int alive;
-    char symbol;
-    Color playerColor;
-    int length;
     struct Position vecPos[MAXDIM];
+    int direction;
+    char symbol;
+    int alive;
+    int length;
+    int posX;
+    int posY;
+    Color playerColor;
 };
 
-// void generateFood(char game[HEIGHT][WIDTH], int *foodX, int *foodY) {
-//     do {
-//         *foodX = rand() % (WIDTH - 2) + 1;
-//         *foodY = rand() % (HEIGHT - 2) + 1;
-//     } while (game[*foodY][*foodX] != ' ');
-
-//     game[*foodY][*foodX] = '*';
-// }
 
 void fillCell(char game[HEIGHT][WIDTH], int i, int j, char playerSymbol) {
     game[i][j] = playerSymbol;
 }
 
-void drawBoard(char game[HEIGHT][WIDTH], struct Player *player) {
+void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
     Color currentColor;
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
@@ -83,59 +64,48 @@ void drawBoard(char game[HEIGHT][WIDTH], struct Player *player) {
             } else if (game[i][j] == player->symbol) {
                 currentColor = player->playerColor;
             } 
-            // else if (game[i][j] == '*') {
-            //     currentColor = RED;
-            // } CREO QUE ES LO DE LA COMIDA ASI QUE LO COMENTO, DESPUES VEMOS
             fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 }
 
 void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
-    player->actualX = WIDTH / 2;
-    player->actualY = HEIGHT / 2;
-    player->directionToGo = PLAYER1_RIGHT;
+    player->posX = WIDTH / 2;
+    player->posY = HEIGHT / 2;
+    player->direction = PLAYER1_RIGHT;
     player->alive = 1;
     player->symbol = '#';
     player->playerColor = BLUE;
     player->length = 8;
 
-    game[player->actualY][player->actualX] = player->symbol;
+    game[player->posY][player->posX] = player->symbol;
 
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
                 game[i][j] = ' ';
+                fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, BLACK);
         }
     }
-
-    //generateFood(game, &foodX, &foodY);
-
 }
+
+
 
 void input(struct Player *player,char s1, char s2, char s3, char s4) {
     char ch;
     ch = getChar();
 
-    if (ch == s1 && player->directionToGo != s2) {
-        player->directionToGo = s1;
-    } else if (ch == s2 && player->directionToGo != s1) {
-        player->directionToGo = s2;
-    } else if (ch == s3 && player->directionToGo != s4) {
-        player->directionToGo = s3;
-    } else if (ch == s4 && player->directionToGo != s3) {
-        player->directionToGo = s4;
+    if (ch == s1 && player->direction != s2) {
+        player->direction = s1;
+    } else if (ch == s2 && player->direction != s1) {
+        player->direction = s2;
+    } else if (ch == s3 && player->direction != s4) {
+        player->direction = s3;
+    } else if (ch == s4 && player->direction != s3) {
+        player->direction = s4;
     }
 }
 
-void updateSnakeLength(char game[HEIGHT][WIDTH], struct Player *player) {
-    if (player->length >= 1) {
-        fillCell(game, player->vecPos[player->length - 1].i, player->vecPos[player->length - 1].j, player->symbol);
-        for (int i = player->length - 1; i > 0; i--) {
-            player->vecPos[i] = player->vecPos[i - 1];
-        }
-    }
-}
 
 int getNextY(int dir, char s1, char s2, char s3, char s4){
     if (dir == s1) {
@@ -159,39 +129,17 @@ int getNextX(int dir, char s1, char s2, char s3, char s4){
 
 
 void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2, char s3, char s4){
-    // int prevX = player->actualX;
-    // int prevY = player->actualY;
-    //up down left right
+                                                                    //up    down    left     right
+    player->posY += getNextY(player-> direction,s1,s2,s3,s4);
+    player->posX += getNextX(player-> direction,s1,s2,s3,s4);
 
-    player->actualY += getNextY(player-> directionToGo,s1,s2,s3,s4);
-    player->actualX += getNextX(player-> directionToGo,s1,s2,s3,s4);
-
-    // if (player->directionToGo == s1) {
-    //     player->actualY--;
-    // } else if (player->directionToGo == s2) {
-    //     player->actualY++;
-    // } else if (player->directionToGo == s3) {
-    //     player->actualX--;
-    // } else if (player->directionToGo == s4) {
-    //     player->actualX++;
-    // }
-
-
-    //Verificar si la moto choca con su propia estela
-    // Verificar si la serpiente se come a sí misma
-    // for (int i = 0; i < player->length; i++) {
-    //     // if (player->actualX == player->vecPos[i].j && player->actualY == player->vecPos[i].i) {
-    //     //     player->alive = 0;
-    //     //     break;
-    //     // }
-    // }
-        if(game[player->actualY ][player->actualX ] != ' '){
-            player->alive = 0;
-        }
+    
+    if(game[player->posY ][player->posX ] != ' '){
+        player->alive = 0;
+    }
     
     // Verifica si la moto choca con el borde de la pantalla
-    //verifica si la serpiente choco con el borde de la pantalla
-    if (player->actualX < 0 || player->actualX >= WIDTH  || player->actualY < 0 || player->actualY >= HEIGHT ) {
+    if (player->posX < 0 || player->posX >= WIDTH  || player->posY < 0 || player->posY >= HEIGHT ) {
         player->alive = 0;
     }
     
@@ -201,40 +149,37 @@ void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2,
         player->playerColor = BLACK;
     }
 
-    //if (player->actualX == foodX && player->actualY == foodY) {
-        //player->length++;
-        //generateFood(game, &foodX, &foodY);
-        sys_playSound(1500);
-        sys_mute();
-    //}
+
+    sys_playSound(1500);
+    sys_mute();
+
 
     if (player->alive) {
-        game[player->actualY][player->actualX] = player->symbol;
-        player->vecPos[0].i = player->actualY;
-        player->vecPos[0].j = player->actualX;
+        game[player->posY][player->posX] = player->symbol;
+        fillCell(game, player->posY, player->posX, player->symbol);
     }
 }
 
 void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, char s3, char s4) {
     inLogic(game,player,s1,s2,s3,s4);
 
-    drawBoard(game, player);
+    printBoard(game, player);
 }
 
 void snakeGame() {
     char game[HEIGHT][WIDTH];
+    
     struct Player player;
     startGame(game, &player);
     gameover = 0;
 
     while (!gameover) {
         input(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        updateSnakeLength(game, &player);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         wait(100);
     }
-    fill_rect(0, 0, get_scrWidht() / 2, get_scrHeight() / 8, BLACK);
-    prints("\nGame Over. Press space to exit\n", MAX_BUFFER);
+    fill_rect(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
+    prints("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
         continue;
     }
@@ -251,26 +196,26 @@ struct Player player1;
 struct Player player2;
 
 void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
-    player1->actualX = WIDTH / 4;
-    player1->actualY = HEIGHT / 4;
-    player1->directionToGo = PLAYER1_DOWN;
+    player1->posX = WIDTH / 4;
+    player1->posY = HEIGHT / 4;
+    player1->direction = PLAYER1_DOWN;
     player1->alive = 1;
     player1->symbol = '#';
     player1->playerColor = BLUE;
     player1->length = 2;
 
-    player2->actualX = 3 * WIDTH / 4;
-    player2->actualY = 3 * HEIGHT / 4;
-    player2->directionToGo = PLAYER2_UP;
+    player2->posX = 3 * WIDTH / 4;
+    player2->posY = 3 * HEIGHT / 4;
+    player2->direction = PLAYER2_UP;
     player2->alive = 1;
     player2->symbol = '@';
     player2->playerColor = ORANGE;
     player2->length = 2;
 
-    game[player1->actualY][player1->actualX] = player1->symbol;
-    game[player2->actualY][player2->actualX] = player2->symbol;
+    game[player1->posY][player1->posX] = player1->symbol;
+    game[player2->posY][player2->posX] = player2->symbol;
 
-    // Inicializa el tablero y la comida, asegurándote de que las serpientes no se superpongan con la comida inicialmente
+    // Inicializa el tablero
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
@@ -278,16 +223,11 @@ void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct 
         }
     }
 
-    // game[player1->actualY][player1->actualX] = player1->symbol;
-    // game[player2->actualY][player2->actualX] = player2->symbol;
-
-    //generateFood(game, &foodX, &foodY);
+   
 }
 
 void logic2(char game[HEIGHT][WIDTH], struct Player *player,char s1,char s2,char s3,char s4) {
     inLogic(game,player,s1,s2,s3,s4);
-
-    //drawBoard(game, player);
 }
 
 
@@ -304,117 +244,10 @@ void drawBoard2(char game[HEIGHT][WIDTH], struct Player *player1, struct Player 
             } else if (game[i][j] == player2->symbol) {
                 currentColor = player2->playerColor;
             } 
-            // else if (game[i][j] == '*') {
-            //     currentColor = RED;
-            //}
             fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 }
-
-
-
-
-// void input2Players(struct Player *player1, struct Player *player2) {
-//     char ch1, ch2;
-//     ch1 = getChar();
-//     ch2 = getChar();
-
-//     // Actualiza las direcciones de ambos jugadores
-//     if (ch1 == PLAYER1_UP && player1->directionToGo != DOWN) {
-//         player1->directionToGo = UP;
-//     } else if (ch1 == PLAYER1_DOWN && player1->directionToGo != UP) {
-//         player1->directionToGo = DOWN;
-//     } else if (ch1 == PLAYER1_LEFT && player1->directionToGo != RIGHT) {
-//         player1->directionToGo = LEFT;
-//     } else if (ch1 == PLAYER1_RIGHT && player1->directionToGo != LEFT) {
-//         player1->directionToGo = RIGHT;
-//     }
-
-//     if (ch2 == PLAYER2_UP && player2->directionToGo != DOWN) {
-//         player2->directionToGo = UP;
-//     } else if (ch2 == PLAYER2_DOWN && player2->directionToGo != UP) {
-//         player2->directionToGo = DOWN;
-//     } else if (ch2 == PLAYER2_LEFT && player2->directionToGo != RIGHT) {
-//         player2->directionToGo = LEFT;
-//     } else if (ch2 == PLAYER2_RIGHT && player2->directionToGo != LEFT) {
-//         player2->directionToGo = RIGHT;
-//     }
-// }
-
-// void logic2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
-//     // int prevX1 = player1->actualX;
-//     // int prevY1 = player1->actualY;
-
-//     // int prevX2 = player2->actualX;
-//     // int prevY2 = player2->actualY;
-
-//     // Actualiza la lógica de movimiento y colisión para ambos jugadores
-//     // Verifica si ambos jugadores chocan con las paredes o consigo mismos
-//     // Verifica si ambos jugadores comen la comida y aumenta sus longitudes
-
-//     if (player1->directionToGo == UP) {
-//         player1->actualY--;
-//     } else if (player1->directionToGo == DOWN) {
-//         player1->actualY++;
-//     } else if (player1->directionToGo == LEFT) {
-//         player1->actualX--;
-//     } else if (player1->directionToGo == RIGHT) {
-//         player1->actualX++;
-//     }
-
-//     if (player2->directionToGo == UP) {
-//         player2->actualY--;
-//     } else if (player2->directionToGo == DOWN) {
-//         player2->actualY++;
-//     } else if (player2->directionToGo == LEFT) {
-//         player2->actualX--;
-//     } else if (player2->directionToGo == RIGHT) {
-//         player2->actualX++;
-//     }
-
-//     // Verifica las colisiones con las paredes y consigo mismos para ambos jugadores
-//     if (player1->actualX < 0 || player1->actualX >= WIDTH || player1->actualY < 0 || player1->actualY >= HEIGHT) {
-//         player1->alive = 0;
-//     }
-    
-//     if (player2->actualX < 0 || player2->actualX >= WIDTH || player2->actualY < 0 || player2->actualY >= HEIGHT) {
-//         player2->alive = 0;
-//     }
-
-//     // Verifica si ambos jugadores chocan consigo mismos
-//     for (int i = 0; i < player1->length; i++) {
-//         if (player1->actualX == player1->vecPos[i].j && player1->actualY == player1->vecPos[i].i) {
-//             player1->alive = 0;
-//             break;
-//         }
-//     }
-    
-//     for (int i = 0; i < player2->length; i++) {
-//         if (player2->actualX == player2->vecPos[i].j && player2->actualY == player2->vecPos[i].i) {
-//             player2->alive = 0;
-//             break;
-//         }
-//     }
-
-//     // Verifica si ambos jugadores comen la comida y aumenta sus longitudes
-//     if (player1->actualX == foodX && player1->actualY == foodY) {
-//         player1->length++;
-//         generateFood(game, &foodX, &foodY);
-//     }
-    
-//     if (player2->actualX == foodX && player2->actualY == foodY) {
-//         player2->length++;
-//         generateFood(game, &foodX, &foodY);
-//     }
-
-//     if (!player1->alive && !player2->alive) {
-//         gameover = 1;
-//     }
-
-//     // Dibuja el tablero para ambos jugadores
-//     drawBoard2(game, player1, player2);
-// }
 
 void snakeGame2Players() {
     char game[HEIGHT][WIDTH];
@@ -422,32 +255,19 @@ void snakeGame2Players() {
     gameover = 0;
 
     while (!gameover) {
-        //input2Players(&player1, &player2);
-        // input(&player1,UP,DOWN,LEFT,RIGHT);
-        // updateSnakeLength(game, &player1);
-        // input(&player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
-        // updateSnakeLength(game, &player2);
-        // //logic2Players(game, &player1, &player2);
-        // logic2(game,&player1,UP,DOWN,LEFT,RIGHT);
-        // logic2(game,&player2,PLAYER2_UP,PLAYER2_DOWN,PLAYER2_LEFT,PLAYER2_RIGHT);
-        // drawBoard2(game,&player1,&player2);
-        // wait(100);
 
         input(&player1, PLAYER1_UP, PLAYER1_DOWN, PLAYER1_LEFT, PLAYER1_RIGHT);
-        updateSnakeLength(game, &player1);
         logic2(game, &player1, PLAYER1_UP, PLAYER1_DOWN, PLAYER1_LEFT, PLAYER1_RIGHT);
 
         input(&player2, PLAYER2_UP, PLAYER2_DOWN, PLAYER2_LEFT, PLAYER2_RIGHT);
-        updateSnakeLength(game, &player2);
         logic2(game, &player2, PLAYER2_UP, PLAYER2_DOWN, PLAYER2_LEFT, PLAYER2_RIGHT);
 
         drawBoard2(game, &player1, &player2);
         wait(100);
 
-
     }
-    fill_rect(0, 0, get_scrWidht() / 2, get_scrHeight() / 8, BLACK);
-    prints("\nGame Over. Press space to exit\n", MAX_BUFFER);
+    fill_rect(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
+    prints("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
         continue;
     }
@@ -471,6 +291,6 @@ int startSnake(int option) {
     } else {
         return 0;
     }
-
+    
     return 1;
 }

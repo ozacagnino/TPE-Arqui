@@ -36,8 +36,8 @@ void printBase(uint64_t value, uint32_t base);
 
 
 void clear_scr();
-int get_scrWidht();
-int get_scrHeight();
+int getScreenWidth();
+int getScreenHeight();
 void fill_rect(int x, int y, int x2, int y2, Color color);
 void wait(uint64_t ms);
 void inforeg();

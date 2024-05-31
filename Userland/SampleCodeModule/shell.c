@@ -13,13 +13,13 @@ char line[MAX_BUFFER+1] = {0}; //asi me aseguro que al menos va haber un cero
 char parameter[MAX_BUFFER+1] = {0};
 char command[MAX_BUFFER+1] = {0};
 int linePos = 0;
-char lastc;
+char lastc;													//eliminator
 const char * commands[] = {"undefined","help","time","clear","snake","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
 
 void showCommands(){
+	prints("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
 	prints("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
 	prints("\n-clear-              limpia la pantalla",MAX_BUFFER);
-	prints("\n-snake-              inicia el juego de snake",MAX_BUFFER);
 	prints("\n-inforeg-            imprime los valores de los registros",MAX_BUFFER);
 	prints("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
 	prints("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
@@ -43,7 +43,7 @@ static void printLine(char c);
 static int checkLine();
 static void cmd_undefined();
 static void cmd_help();
-static void cmd_time();
+static void cmd_time(); 
 static void cmd_clear();
 static void cmd_snake();
 static void cmd_inforeg();
@@ -84,8 +84,6 @@ static void printLine(char c){
 
 
 static void newLine(){
-
-
 	int i = checkLine();
 
 	(*commands_ptr[i])();
@@ -104,7 +102,6 @@ static void newLine(){
 	}
 }
 
-
 //separa comando de parametro
 static int checkLine(){
 	int i = 0;
@@ -119,8 +116,6 @@ static int checkLine(){
 			parameter[k++] = line[j++];
 		}
 	}
-
-
 
 	for (i = 1 ; i < MAX_COMMANDS ; i++ ){
 		if (strcmp(command,commands[i]) == 0){
@@ -150,7 +145,7 @@ static void cmd_time(){
 
 static void cmd_snake(){
 	if(!startSnake(charToInt(parameter))){
-		prints("\nPor favor ingrese un parametro valido. 'snake 1' o 'snake 2' para comenzar el juego\n",MAX_BUFFER);
+		prints("\nParametro invalido. Utilice 'eliminator 1' o 'eliminator 2' para comenzar el juego\n",MAX_BUFFER);
 	}
 	
 }
@@ -178,8 +173,4 @@ static void cmd_charsizeplus(){
 static void cmd_charsizeminus(){
 	decreaseScale();
 }
-
-
-
-
 
