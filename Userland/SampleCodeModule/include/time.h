@@ -2,6 +2,7 @@
 #define _TIME_H_
 
 #include <stdint.h>
+#include <math.h>
 
 
 uint64_t getHours();
