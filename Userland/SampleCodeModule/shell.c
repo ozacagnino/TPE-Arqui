@@ -150,7 +150,7 @@ static void cmd_time(){
 
 static void cmd_snake(){
 	if(!startSnake(charToInt(parameter))){
-		prints("\ningrese un parametro valido '1' o '2' jugadores \n",MAX_BUFFER);
+		prints("\nPor favor ingrese un parametro valido. 'snake 1' o 'snake 2' para comenzar el juego\n",MAX_BUFFER);
 	}
 	
 }

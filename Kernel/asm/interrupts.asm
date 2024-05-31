@@ -216,8 +216,8 @@ exception_invalidOpCode:
 	call exception_handler
 
 
-; syscalls params:	RDI	RSI	RDX	R10	R8	R9
-; C 	params   :	RDI RSI RDX RCX R8  RAX
+; syscalls params:	RDI	RSI	RDX	R10	R8	RAX
+; C 	params   :	RDI RSI RDX RCX R8  R9
 interrupt_syscall:
 	mov rcx, r10
 	mov r9, rax

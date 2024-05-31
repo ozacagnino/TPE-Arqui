@@ -5,10 +5,10 @@
 
 static unsigned long int next = 1;
 
-int rand() {
-    next = next * 1103515245 + 12345;
-    return (unsigned int)(next / 65536) % 32768;
-}
+// int rand() {
+//     next = next * 1103515245 + 12345;
+//     return (unsigned int)(next / 65536) % 32768;
+// }
 
 
 #define WIDTH 40
@@ -18,12 +18,12 @@ int rand() {
 static Color BLACK = {0,0,0};
 static Color WHITE = {255,255,255};
 static Color RED = {0,0,255};
-//static Color LIGHT_BLUE = {255,255,255};
-//static Color BLUE = {255,0,0};
+static Color LIGHT_BLUE = {255,255,255};
+static Color BLUE = {255,0,0};
 static Color ORANGE = {16,160,255};
-//static Color YELLOW = {30,224,255};
+static Color YELLOW = {30,224,255};
 static Color PURPLE = {255,32,160};
-//static Color PINK = {100,0,244};
+static Color PINK = {100,0,244};
 
 #define PIXELWIDTH (get_scrWidht() / WIDTH)
 #define PIXELHEIGHT (get_scrHeight() / HEIGHT)
@@ -43,6 +43,7 @@ static Color PURPLE = {255,32,160};
 int gameover;
 int foodX, foodY;
 
+
 struct Position {
     int i;
     int j;
@@ -59,17 +60,17 @@ struct Player {
     struct Position vecPos[MAXDIM];
 };
 
-void generateFood(char game[HEIGHT][WIDTH], int *foodX, int *foodY) {
-    do {
-        *foodX = rand() % (WIDTH - 2) + 1;
-        *foodY = rand() % (HEIGHT - 2) + 1;
-    } while (game[*foodY][*foodX] != ' ');
+// void generateFood(char game[HEIGHT][WIDTH], int *foodX, int *foodY) {
+//     do {
+//         *foodX = rand() % (WIDTH - 2) + 1;
+//         *foodY = rand() % (HEIGHT - 2) + 1;
+//     } while (game[*foodY][*foodX] != ' ');
 
-    game[*foodY][*foodX] = '*';
-}
+//     game[*foodY][*foodX] = '*';
+// }
 
-void clearCell(char game[HEIGHT][WIDTH], int i, int j) {
-    game[i][j] = ' ';
+void fillCell(char game[HEIGHT][WIDTH], int i, int j, char playerSymbol) {
+    game[i][j] = playerSymbol;
 }
 
 void drawBoard(char game[HEIGHT][WIDTH], struct Player *player) {
@@ -78,12 +79,13 @@ void drawBoard(char game[HEIGHT][WIDTH], struct Player *player) {
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
             if (game[i][j] == ' ') {
-                currentColor = WHITE;
+                currentColor = BLACK;
             } else if (game[i][j] == player->symbol) {
                 currentColor = player->playerColor;
-            } else if (game[i][j] == '*') {
-                currentColor = RED;
-            }
+            } 
+            // else if (game[i][j] == '*') {
+            //     currentColor = RED;
+            // } CREO QUE ES LO DE LA COMIDA ASI QUE LO COMENTO, DESPUES VEMOS
             fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
@@ -95,19 +97,19 @@ void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     player->directionToGo = PLAYER1_RIGHT;
     player->alive = 1;
     player->symbol = '#';
-    player->playerColor = ORANGE;
-    player->length = 2;
+    player->playerColor = BLUE;
+    player->length = 8;
 
     game[player->actualY][player->actualX] = player->symbol;
 
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
-            game[i][j] = ' ';
+                game[i][j] = ' ';
         }
     }
 
-    generateFood(game, &foodX, &foodY);
+    //generateFood(game, &foodX, &foodY);
 
 }
 
@@ -128,7 +130,7 @@ void input(struct Player *player,char s1, char s2, char s3, char s4) {
 
 void updateSnakeLength(char game[HEIGHT][WIDTH], struct Player *player) {
     if (player->length >= 1) {
-        clearCell(game, player->vecPos[player->length - 1].i, player->vecPos[player->length - 1].j);
+        fillCell(game, player->vecPos[player->length - 1].i, player->vecPos[player->length - 1].j, player->symbol);
         for (int i = player->length - 1; i > 0; i--) {
             player->vecPos[i] = player->vecPos[i - 1];
         }
@@ -152,6 +154,7 @@ void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2,
     }
 
 
+    //Verificar si la moto choca con su propia estela
     // Verificar si la serpiente se come a sí misma
     for (int i = 0; i < player->length; i++) {
         if (player->actualX == player->vecPos[i].j && player->actualY == player->vecPos[i].i) {
@@ -172,12 +175,12 @@ void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2,
         player->playerColor = BLACK;
     }
 
-    if (player->actualX == foodX && player->actualY == foodY) {
-        player->length++;
-        generateFood(game, &foodX, &foodY);
+    //if (player->actualX == foodX && player->actualY == foodY) {
+        //player->length++;
+        //generateFood(game, &foodX, &foodY);
         sys_playSound(1500);
         sys_mute();
-    }
+    //}
 
     if (player->alive) {
         game[player->actualY][player->actualX] = player->symbol;
@@ -223,19 +226,19 @@ struct Player player2;
 
 void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
     player1->actualX = WIDTH / 4;
-    player1->actualY = HEIGHT / 2;
-    player1->directionToGo = PLAYER1_RIGHT;
+    player1->actualY = HEIGHT / 4;
+    player1->directionToGo = PLAYER1_DOWN;
     player1->alive = 1;
     player1->symbol = '#';
-    player1->playerColor = ORANGE;
+    player1->playerColor = BLUE;
     player1->length = 2;
 
     player2->actualX = 3 * WIDTH / 4;
-    player2->actualY = HEIGHT / 2;
-    player2->directionToGo = PLAYER2_RIGHT;
+    player2->actualY = 3 * HEIGHT / 4;
+    player2->directionToGo = PLAYER2_UP;
     player2->alive = 1;
     player2->symbol = '@';
-    player2->playerColor = PURPLE;
+    player2->playerColor = ORANGE;
     player2->length = 2;
 
     game[player1->actualY][player1->actualX] = player1->symbol;
@@ -252,7 +255,7 @@ void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct 
     // game[player1->actualY][player1->actualX] = player1->symbol;
     // game[player2->actualY][player2->actualX] = player2->symbol;
 
-    generateFood(game, &foodX, &foodY);
+    //generateFood(game, &foodX, &foodY);
 }
 
 void logic2(char game[HEIGHT][WIDTH], struct Player *player,char s1,char s2,char s3,char s4) {
@@ -269,14 +272,15 @@ void drawBoard2(char game[HEIGHT][WIDTH], struct Player *player1, struct Player 
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
             if (game[i][j] == ' ') {
-                currentColor = WHITE;
+                currentColor = BLACK;
             } else if (game[i][j] == player1->symbol) {
                 currentColor = player1->playerColor;
             } else if (game[i][j] == player2->symbol) {
                 currentColor = player2->playerColor;
-            } else if (game[i][j] == '*') {
-                currentColor = RED;
-            }
+            } 
+            // else if (game[i][j] == '*') {
+            //     currentColor = RED;
+            //}
             fill_rect(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }

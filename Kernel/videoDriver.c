@@ -285,12 +285,12 @@ void dv_setPixel(uint16_t x, uint16_t y, Color color) {
 
 
 //dibujo un cuadrado
-void dv_fillRect (int x, int y, int w, int h, Color color){
+void dv_fillRect (int x, int y, int pixelWidth, int pixelHeight, Color color){
     Color * pixel;
 
-    for (int i = 0 ; i < h ; i++){
+    for (int i = 0 ; i < pixelHeight ; i++){
         pixel = (Color*) getPixelPtr(x,y+i);
-        for (int j = 0 ; j < w ; j++, pixel++){
+        for (int j = 0 ; j < pixelWidth ; j++, pixel++){
             *pixel = color;
         }
     }
