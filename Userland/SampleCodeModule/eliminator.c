@@ -83,7 +83,7 @@ void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     player->length = 5;
 
     game[player->posY][player->posX] = player->symbol;
-
+    printString("Score:", 8);
     int i, j;
     for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
@@ -187,6 +187,8 @@ void eliminatorGame() {
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
+        // printString("\b\b\b\b\b\b\b\b", 8);
+        // printString("Score:", 8); //ES BUENA LA IDEA, FALTA CEREBRO
         scoreP0++;
 
         wait(100);
@@ -248,7 +250,7 @@ void logic2(char game[HEIGHT][WIDTH], struct Player *player,char s1,char s2,char
 void drawBoard2(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
     Color currentColor;
     int i, j;
-    for (i = 0; i < HEIGHT; i++) {
+    for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
             if (game[i][j] == ' ') {
                 currentColor = BLACK;
