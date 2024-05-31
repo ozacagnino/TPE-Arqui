@@ -137,33 +137,59 @@ void updateSnakeLength(char game[HEIGHT][WIDTH], struct Player *player) {
     }
 }
 
+int getNextY(int dir, char s1, char s2, char s3, char s4){
+    if (dir == s1) {
+        return -1;
+    } else if (dir == s2) {
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+int getNextX(int dir, char s1, char s2, char s3, char s4){
+    if (dir == s3) {
+        return -1;
+    } else if (dir == s4) {
+        return 1;
+    }else{
+        return 0;
+    }
+}
 
 
 void inLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2, char s3, char s4){
     // int prevX = player->actualX;
     // int prevY = player->actualY;
     //up down left right
-    if (player->directionToGo == s1) {
-        player->actualY--;
-    } else if (player->directionToGo == s2) {
-        player->actualY++;
-    } else if (player->directionToGo == s3) {
-        player->actualX--;
-    } else if (player->directionToGo == s4) {
-        player->actualX++;
-    }
+
+    player->actualY += getNextY(player-> directionToGo,s1,s2,s3,s4);
+    player->actualX += getNextX(player-> directionToGo,s1,s2,s3,s4);
+
+    // if (player->directionToGo == s1) {
+    //     player->actualY--;
+    // } else if (player->directionToGo == s2) {
+    //     player->actualY++;
+    // } else if (player->directionToGo == s3) {
+    //     player->actualX--;
+    // } else if (player->directionToGo == s4) {
+    //     player->actualX++;
+    // }
 
 
     //Verificar si la moto choca con su propia estela
     // Verificar si la serpiente se come a sí misma
-    for (int i = 0; i < player->length; i++) {
-        if (player->actualX == player->vecPos[i].j && player->actualY == player->vecPos[i].i) {
+    // for (int i = 0; i < player->length; i++) {
+    //     // if (player->actualX == player->vecPos[i].j && player->actualY == player->vecPos[i].i) {
+    //     //     player->alive = 0;
+    //     //     break;
+    //     // }
+    // }
+        if(game[player->actualY ][player->actualX ] != ' '){
             player->alive = 0;
-            break;
         }
-    }
     
-
+    // Verifica si la moto choca con el borde de la pantalla
     //verifica si la serpiente choco con el borde de la pantalla
     if (player->actualX < 0 || player->actualX >= WIDTH  || player->actualY < 0 || player->actualY >= HEIGHT ) {
         player->alive = 0;
