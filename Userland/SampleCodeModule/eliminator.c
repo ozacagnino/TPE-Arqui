@@ -139,6 +139,7 @@ int getNextX(int dir, char s1, char s2, char s3, char s4){
 
 void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2, char s3, char s4){
                                                                     //up    down    left     right
+
     player->posY += getNextY(player-> direction,s1,s2,s3,s4);
     player->posX += getNextX(player-> direction,s1,s2,s3,s4);
 
@@ -174,6 +175,8 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
         game[player->posY][player->posX] = player->symbol;
         fillCell(game, player->posY, player->posX, player->symbol);
     }
+    
+ /*   */
 }
 
 void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, char s3, char s4) {
@@ -192,13 +195,23 @@ void eliminatorGame() {
         printString("\n", 1);
     }
     printString("_________________________________________________________________________________________________________________\n", 120);
-    printString("Score:", 8); 
-
+    printString("Score:    ", 12); 
+    
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         scoreP0++;
-
+        int oldScoreDigits = 0;
+        int aux = scoreP0;
+        for(int aux = scoreP0; aux > 0; aux /= 10){
+            oldScoreDigits++;
+        }
+        if(oldScoreDigits > 0){
+            for(int i = 0; i < oldScoreDigits; i++){
+                printChar('\b');
+            }
+        }
+        printDec(scoreP0);
         wait(100);
     }
     clear_scr();
