@@ -187,11 +187,11 @@ void eliminatorGame() {
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        // printString("\b\b\b\b\b\b\b\b", 8);
-        // printString("Score:", 8); //ES BUENA LA IDEA, FALTA CEREBRO
+        printString("Score:", 8); //ES BUENA LA IDEA, FALTA CEREBRO
         scoreP0++;
 
         wait(100);
+        printString("\b\b\b\b\b\b\b\b", 8);
     }
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
