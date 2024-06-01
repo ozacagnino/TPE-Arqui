@@ -188,9 +188,10 @@ void eliminatorGame() {
     struct Player player;
     startGame(game, &player);
     gameover = 0;
-    for(int i=0 ; i<42 ; i++){//CAPAZ SE PUEDE HACER DE UNA MEJOR MANERA 
-        printString("\n", 3);
+    for(int i=0 ; i<41 ; i++){//CAPAZ SE PUEDE HACER DE UNA MEJOR MANERA 
+        printString("\n", 1);
     }
+    printString("_________________________________________________________________________________________________________________\n", 120);
     printString("Score:", 8); 
 
     while (!gameover) {
