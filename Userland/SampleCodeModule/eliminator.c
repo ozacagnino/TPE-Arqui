@@ -70,7 +70,7 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
             // } 
             // paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             
-            if (game[i][j] == player->symbol) {
+            if (game[i][j] == player->symbol) { //COSA NUEVA, CHEQUEENLO
                 currentColor = player->playerColor;
                 paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             } 
@@ -188,16 +188,19 @@ void eliminatorGame() {
     struct Player player;
     startGame(game, &player);
     gameover = 0;
+    for(int i=0 ; i<42 ; i++){//CAPAZ SE PUEDE HACER DE UNA MEJOR MANERA 
+        printString("\n", 3);
+    }
+    printString("Score:", 8); 
 
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        printString("Score:", 8); //ES BUENA LA IDEA, FALTA CEREBRO
         scoreP0++;
 
         wait(100);
-        printString("\b\b\b\b\b\b\b\b", 8);
     }
+    clear_scr();
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {
