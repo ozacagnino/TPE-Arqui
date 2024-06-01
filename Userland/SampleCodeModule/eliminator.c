@@ -63,12 +63,17 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
-            if (game[i][j] == ' ') {
-                currentColor = BLACK;
-            } else if (game[i][j] == player->symbol) {
+            // if (game[i][j] == ' ') {
+            //     currentColor = BLACK;
+            // }else if (game[i][j] == player->symbol) {
+            //     currentColor = player->playerColor;
+            // } 
+            // paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
+            
+            if (game[i][j] == player->symbol) {
                 currentColor = player->playerColor;
+                paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             } 
-            paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 }

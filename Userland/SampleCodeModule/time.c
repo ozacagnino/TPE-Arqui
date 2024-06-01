@@ -34,12 +34,12 @@ void display_time(){
 		hours /= 16;
 	}
 	realHour += gmt_offset;
-	hours = realHour;
-	if (hours < 0) {
-        hours += 24;
-    } else if (hours >= 24) {
-        hours -= 24;
+	if (realHour < 0) {
+        realHour += 24;
+    } else if (realHour >= 24) {
+        realHour -= 24;
     }
+	hours = realHour;
 	minutes = getMinutes();
 	seconds = getSeconds();
 
