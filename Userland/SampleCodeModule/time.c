@@ -26,7 +26,7 @@ int pow(double base, int exponent) {
 void display_time(){
 	int hours, minutes, seconds;
 
-	hours = getHours(); // TAMBIEN HAY QUE HACER LAS EXCEPCIONES DE CUANDO SON LAS 00 Y TIENE QUE PRINTEAR 21 (creo que ya las hice, no se)
+	hours = getHours();
 	int realHour = 0;
 	int gmt_offset = GMT;
 	for(int i=0 ; hours > 0 ; i++){
