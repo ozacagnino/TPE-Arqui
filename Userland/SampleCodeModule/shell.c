@@ -17,6 +17,7 @@ char lastc;
 const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
 
 void showCommands(){
+	printString("\nlista de comandos:",MAX_BUFFER);
 	printString("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
 	printString("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
 	printString("\n-clear-              limpia la pantalla",MAX_BUFFER);
