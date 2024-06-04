@@ -46,7 +46,7 @@ struct Position {
 struct Player {
     struct Position vecPos[MAXDIM];
     int direction;
-    char symbol;
+    char number;
     int alive;
     int length;
     int posX;
@@ -55,8 +55,8 @@ struct Player {
 };
 
 
-void fillCell(char game[HEIGHT][WIDTH], int i, int j, char playerSymbol) {
-    game[i][j] = playerSymbol;
+void fillCell(char game[HEIGHT][WIDTH], int i, int j, char playerNumber) {
+    game[i][j] = playerNumber;
 }
 
 void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
@@ -64,14 +64,7 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
-            // if (game[i][j] == ' ') {
-            //     currentColor = BLACK;
-            // }else if (game[i][j] == player->symbol) {
-            //     currentColor = player->playerColor;
-            // } 
-            // paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
-            
-            if (game[i][j] == player->symbol) { //COSA NUEVA, CHEQUEENLO //// LO ACABO DE CHEQUEAR Y NO PARECE TENER CONFLICTO CON NADA
+            if (game[i][j] == player->number) {
                 currentColor = player->playerColor;
                 paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             } 
@@ -81,14 +74,14 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
 
 void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     player->direction = PLAYER1_RIGHT;
-    player->symbol = '1';
+    player->number = '1';
     player->playerColor = BLUE;
     player->posX = WIDTH / 2;
     player->posY = HEIGHT / 2;
     player->alive = 1;
     player->length = 5;
 
-    game[player->posY][player->posX] = player->symbol;
+    game[player->posY][player->posX] = player->number;
     int i, j;
     for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
@@ -158,9 +151,9 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
         gameover = 1;
         player->playerColor = BLACK;
         if(playersAmount == 2){
-            if(player->symbol == '1'){
+            if(player->number == '1'){
                 scoreP2++;
-            }else if(player->symbol == '2'){
+            }else if(player->number == '2'){
                 scoreP1++;
             }
         }
@@ -169,8 +162,8 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
 
 
     if (player->alive) {
-        game[player->posY][player->posX] = player->symbol;
-        fillCell(game, player->posY, player->posX, player->symbol);
+        game[player->posY][player->posX] = player->number;
+        fillCell(game, player->posY, player->posX, player->number);
     }
     
 }
@@ -207,13 +200,14 @@ void eliminatorGame() {
                 printChar('\b');
             }
         }
+        if(scoreP0 % 50 == 0){
+            scoreSound();
+        }
         printDec(scoreP0);
-        // if(!(scoreP0 % 100)){
-        //     playSound(100);
-        // }
         wait(100);
     }
-    sys_playSound(100);
+    deadSound();
+    
     clear_scr();
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
@@ -222,6 +216,23 @@ void eliminatorGame() {
     }
 
     clear_scr();
+}
+
+void scoreSound(){
+    sys_playSound(2093);
+    sys_playSound(1300);
+}
+
+void deadSound(){
+    sys_playSound(2637);
+    sys_playSound(2093);
+    sys_playSound(1568);
+    sys_playSound(1318);
+    sys_playSound(1046);
+    sys_playSound(784);
+    sys_playSound(659);
+    sys_playSound(523);
+    sys_playSound(392);
 }
 
 
@@ -234,7 +245,7 @@ struct Player player2;
 
 void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
     player1->direction = PLAYER1_DOWN;
-    player1->symbol = '1';
+    player1->number = '1';
     player1->playerColor = BLUE;
     player1->posX = WIDTH / 4;
     player1->posY = HEIGHT / 4;
@@ -242,15 +253,15 @@ void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct 
     player1->length = 2;
 
     player2->direction = PLAYER2_UP;
-    player2->symbol = '2';
+    player2->number = '2';
     player2->playerColor = ORANGE;
     player2->posX = 3 * WIDTH / 4;
     player2->posY = 3 * HEIGHT / 4;
     player2->alive = 1;
     player2->length = 2;
 
-    game[player1->posY][player1->posX] = player1->symbol;
-    game[player2->posY][player2->posX] = player2->symbol;
+    game[player1->posY][player1->posX] = player1->number;
+    game[player2->posY][player2->posX] = player2->number;
 
     // Inicializa el tablero
     int i, j;
@@ -276,9 +287,9 @@ void drawBoard2(char game[HEIGHT][WIDTH], struct Player *player1, struct Player 
         for (j = 0; j < WIDTH; j++) {
             if (game[i][j] == ' ') {
                 currentColor = BLACK;
-            } else if (game[i][j] == player1->symbol) {
+            } else if (game[i][j] == player1->number) {
                 currentColor = player1->playerColor;
-            } else if (game[i][j] == player2->symbol) {
+            } else if (game[i][j] == player2->number) {
                 currentColor = player2->playerColor;
             } 
             paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
@@ -303,6 +314,7 @@ void eliminatorGame2Players() {
         wait(100);
 
     }
+    deadSound();
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {

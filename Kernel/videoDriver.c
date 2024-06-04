@@ -106,20 +106,20 @@ uint16_t cursorY = 0;
 static char buffer[64] = { '0' };
 
 
-void dv_prints(const char *str, Color fnt, Color bgd){
+void videoDriver_prints(const char *str, Color fnt, Color bgd){
     for (int i = 0 ; str[i] != '\0'; i++ ){
-        dv_print(str[i], fnt, bgd);
+        videoDriver_print(str[i], fnt, bgd);
     }
 }
 
 
-void dv_print(const char c, Color fnt, Color bgd){
+void videoDriver_print(const char c, Color fnt, Color bgd){
     switch (c) {
         case '\n':
-            dv_newline();
+            videoDriver_newline();
         break;
         case '\b':
-            dv_backspace(fnt, bgd);
+            videoDriver_backspace(fnt, bgd);
         break;
         case '\0':
             /* nada, no imprime nada */
@@ -131,7 +131,7 @@ void dv_print(const char c, Color fnt, Color bgd){
 }
 
 
-void dv_newline(){
+void videoDriver_newline(){
     cursorX = 0;
     cursorY += CHAR_HEIGHT* pixelScale;
 
@@ -142,7 +142,7 @@ void dv_newline(){
 }
 
 
-void dv_backspace(Color fnt, Color bgd){
+void videoDriver_backspace(Color fnt, Color bgd){
     if (cursorX >= CHAR_WIDTH*pixelScale){
         cursorX -= CHAR_WIDTH*pixelScale;
     } else {
@@ -153,7 +153,7 @@ void dv_backspace(Color fnt, Color bgd){
 }
 
 
-void dv_clear (Color color) {
+void clearScreen (Color color) {
     Color* pixel = (Color*) ((uint64_t)screenInfo->framebuffer);
 
     //recorro todos los pixeles de la pantalla y los pongo del color que quiero
@@ -192,7 +192,7 @@ static void drawChar(int x, int y, unsigned char c, Color fntColor, Color bgColo
             // Uso el factor de escala
             for (int i = 0; i < pixelScale; i++) {
                 for (int j = 0; j < pixelScale; j++) {
-                    dv_setPixel(cursorX + (8 - cx) * pixelScale + i, cursorY + cy * pixelScale + j, glyph[cy] & mask[cx] ? fntColor : bgColor);
+                    videoDriver_setPixel(cursorX + (8 - cx) * pixelScale + i, cursorY + cy * pixelScale + j, glyph[cy] & mask[cx] ? fntColor : bgColor);
                 }
             }
         }
@@ -215,22 +215,22 @@ static void scrollUp (){
 }
 
 
-void dv_printDec(uint64_t value, Color fnt, Color bgd){
-    dv_printBase(value, 10,fnt,bgd);
+void videoDriver_printDec(uint64_t value, Color fnt, Color bgd){
+    videoDriver_printBase(value, 10,fnt,bgd);
 }
 
-void dv_printHex(uint64_t value, Color fnt, Color bgd){
-    dv_printBase(value, 16,fnt,bgd);
+void videoDriver_printHex(uint64_t value, Color fnt, Color bgd){
+    videoDriver_printBase(value, 16,fnt,bgd);
 }
 
-void dv_printBin(uint64_t value, Color fnt, Color bgd){
-    dv_printBase(value, 2,fnt,bgd);
+void videoDriver_printBin(uint64_t value, Color fnt, Color bgd){
+    videoDriver_printBase(value, 2,fnt,bgd);
 }
 
-void dv_printBase(uint64_t value, uint32_t base, Color fnt, Color bgd){
+void videoDriver_printBase(uint64_t value, uint32_t base, Color fnt, Color bgd){
     uintToBase(value, buffer, base);
     for (int i = 0 ; buffer[i] != '\0' ; i++ ){
-        dv_print(buffer[i], fnt, bgd);
+        videoDriver_print(buffer[i], fnt, bgd);
     }
 }
 
@@ -264,8 +264,7 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 }
 
 
-//te paso una coordenada de la pantalla en (x,y) y te devuelvo la direccion de la pantalla que representa ese pixel
-static uint32_t* getPixelPtr(uint16_t x, uint16_t y) {
+static uint32_t* getPixelPtr(uint16_t x, uint16_t y) { //paso una coordenada y devuelvo que direccion de la pantalla equivale a ese pixel
     uint8_t pixelwidth = screenInfo->bpp/8;     //la cantidad de bytes hasta el siguiente pixel a la derecha (bpp: BITS per px)
     uint16_t pixelHeight = screenInfo->pitch;   //la cantidad de bytes hasta el pixel hacia abajo
 
@@ -275,8 +274,8 @@ static uint32_t* getPixelPtr(uint16_t x, uint16_t y) {
 
 
 
-//pinto un pixel de la pantalla con el color que quiero, 
-void dv_setPixel(uint16_t x, uint16_t y, Color color) {
+//pinto un pixel de la pantalla con el color que le paso, 
+void videoDriver_setPixel(uint16_t x, uint16_t y, Color color) {
     if (x >= screenInfo->width || y >= screenInfo->height)
         return;
 
@@ -286,7 +285,7 @@ void dv_setPixel(uint16_t x, uint16_t y, Color color) {
 
 
 //dibujo un cuadrado
-void dv_fillRect (int x, int y, int pixelWidth, int pixelHeight, Color color){
+void videoDriver_fillRect (int x, int y, int pixelWidth, int pixelHeight, Color color){
     Color * pixel;
 
     for (int i = 0 ; i < pixelHeight ; i++){
@@ -298,22 +297,22 @@ void dv_fillRect (int x, int y, int pixelWidth, int pixelHeight, Color color){
 }
 
 
-uint16_t dv_getWidth(void) {
+uint16_t getScreenWidth(void) {
     return screenInfo->width;
 }
 
-uint16_t dv_getHeight(void) {
+uint16_t getScreenHeight(void) {
     return screenInfo->height;
 }
 
-uint32_t dv_getFrameBuffer(void) {
+uint32_t getVideoFrameBuffer(void) {
     return screenInfo->framebuffer;
 }
 
-uint8_t dv_getPixelWidth(void){
+uint8_t getPixelWidth(void){
     return screenInfo->bpp;
 }
 
-uint16_t dv_getPitch(void){
+uint16_t getScreenPitch(void){
     return screenInfo->pitch;
 }

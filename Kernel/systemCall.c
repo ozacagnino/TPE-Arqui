@@ -38,12 +38,12 @@ static uint64_t sys_write(uint64_t fd, char buffer) {
         return -1;
     }
 
-    dv_print(buffer,WHITE,BLACK);
+    videoDriver_print(buffer,WHITE,BLACK);
     return 1;
 }
 
 static uint64_t sys_clear(){
-    dv_clear(BLACK);
+    clearScreen(BLACK);
     return 1;
 }
 
@@ -60,15 +60,15 @@ static uint64_t sys_getSeconds(){
 } 
 
 static uint64_t sys_getScrHeight(){
-    return dv_getHeight();
+    return getScreenHeight();
 }
 
 static uint64_t sys_getScrWidth(){
-    return dv_getWidth();
+    return getScreenWidth();
 }
 
 static void sys_fillRect (int x, int y, int x2, int y2, Color color){
-    dv_fillRect (x,y,x2,y2,color);
+    videoDriver_fillRect (x,y,x2,y2,color);
 }
 
 static void sys_wait (int ms){
@@ -93,12 +93,12 @@ static uint64_t sys_printmem ( uint64_t * address ){
     }
 
     uint8_t * aux = (uint8_t *) address;
-        dv_prints("\n",WHITE,BLACK);
+        videoDriver_prints("\n",WHITE,BLACK);
     for(int i=0; i < 32 ; i++){
-        dv_printHex((uint64_t) aux, WHITE, BLACK);
-        dv_prints(" = ", WHITE, BLACK);
-        dv_printHex(*aux, WHITE, BLACK);
-        dv_newline();
+        videoDriver_printHex((uint64_t) aux, WHITE, BLACK);
+        videoDriver_prints(" = ", WHITE, BLACK);
+        videoDriver_printHex(*aux, WHITE, BLACK);
+        videoDriver_newline();
         aux++;
     }
 

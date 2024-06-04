@@ -19,7 +19,7 @@ EXTERN timer_handler
 EXTERN keyboard_handler
 EXTERN syscall_handler
 EXTERN exception_handler
-EXTERN dv_newline
+EXTERN videoDriver_newLine
 
 SECTION .text
 

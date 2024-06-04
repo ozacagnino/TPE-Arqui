@@ -154,13 +154,13 @@ int getScreenHeight(){
 	return scr_height;
 }
 
-static void set_screSize(){
+static void set_screenSize(){
 	scr_width = sys_scrWidth();
 	scr_height = sys_scrHeight();
 }
 
 void paintRectangle(int x, int y, int x2, int y2, Color color){
-	set_screSize();
+	set_screenSize();
 	if ( (x >= 0 && x+x2 < scr_width) && ((y >= 0 && y+y2 < scr_height)) ){
 		sys_fillRect  (x, y, x2, y2, color);
 	}

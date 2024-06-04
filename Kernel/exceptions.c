@@ -30,27 +30,27 @@ static void uint64ToHex(uint64_t n, char buf[16]) {
 
 
 void exception_handler(int exception, const uint64_t register_data[17]) { // 17 porque el ultimo es el rflags
-	dv_prints("\nERROR: ",red,black); 
+	videoDriver_prints("\nERROR: ",red,black); 
 	char buf[19];
     buf[0] = '0';
     buf[1] = 'x';
     buf[18] = '\0';
 
 	if (exception == ZERO_ID){ // zero division
-		dv_prints("zero division detected\n",white, black);
+		videoDriver_prints("zero division detected\n",white, black);
 	} else if (exception == INVAL_OPCODE_ID){ // invalid opcode
-		dv_prints("invalid op code detected\n", white, black);
+		videoDriver_prints("invalid op code detected\n", white, black);
 	}
 
 	for (int i = 0; i < 16; i++) { // 16 registros
-        dv_prints(registers[i],white,black); // nombre del registro
-        dv_prints(": ",white,black); // separador
+        videoDriver_prints(registers[i],white,black); // nombre del registro
+        videoDriver_prints(": ",white,black); // separador
         uint64ToHex(register_data[i], buf+2); // valor del registro
-        dv_prints(buf,white,black); // lo imprimo
+        videoDriver_prints(buf,white,black); // lo imprimo
         if (i % 4 == 3)
-            dv_newline(); // cada 4 registros cambio de linea
+            videoDriver_newline(); // cada 4 registros cambio de linea
         else 
-            dv_prints("   ",white,black);
+            videoDriver_prints("   ",white,black);
     }
 
     reset();
