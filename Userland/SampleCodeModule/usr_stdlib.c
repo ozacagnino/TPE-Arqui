@@ -215,11 +215,11 @@ void inforeg(){
 
 
 
-void test_invopcode(){
+void InvalidOpCodeTest(){
 	ex_invopcode();
 }
 
-void test_zerodiv(){
+void zeroDivTest(){
 	ex_zerodiv();
 }
 

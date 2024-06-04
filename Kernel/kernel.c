@@ -60,18 +60,7 @@ void * initializeKernelBinary()
 int main()
 {	
 	load_idt();
-	// dv_prints("bienvenidos al kernel\n",RED,BLACK, 22);
-
-	// int start_ms = ms_elapsed();
-    // do { _hlt(); } while (ms_elapsed() - start_ms < 1500);
-    // dv_prints("\nno me importa nada",WHITE,BLACK,19);
-
-	// int start_ms2 = ms_elapsed();
-    // do { _hlt(); } while (ms_elapsed() - start_ms2 < 1500);
-    // uint64_t fd = 1;
-
-    //loop();
-
+	
 	clearScanCode();
     ((EntryPoint)sampleCodeModuleAddress)();
 

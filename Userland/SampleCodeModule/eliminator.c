@@ -63,12 +63,17 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
     int i, j;
     for (i = 0; i < HEIGHT; i++) {
         for (j = 0; j < WIDTH; j++) {
-            if (game[i][j] == ' ') {
-                currentColor = BLACK;
-            } else if (game[i][j] == player->symbol) {
+            // if (game[i][j] == ' ') {
+            //     currentColor = BLACK;
+            // }else if (game[i][j] == player->symbol) {
+            //     currentColor = player->playerColor;
+            // } 
+            // paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
+            
+            if (game[i][j] == player->symbol) { //COSA NUEVA, CHEQUEENLO
                 currentColor = player->playerColor;
+                paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             } 
-            paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
         }
     }
 }
@@ -83,7 +88,6 @@ void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     player->length = 5;
 
     game[player->posY][player->posX] = player->symbol;
-    printString("Score:", 8);
     int i, j;
     for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
@@ -134,6 +138,7 @@ int getNextX(int dir, char s1, char s2, char s3, char s4){
 
 void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s2, char s3, char s4){
                                                                     //up    down    left     right
+
     player->posY += getNextY(player-> direction,s1,s2,s3,s4);
     player->posX += getNextX(player-> direction,s1,s2,s3,s4);
 
@@ -169,6 +174,7 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
         game[player->posY][player->posX] = player->symbol;
         fillCell(game, player->posY, player->posX, player->symbol);
     }
+    
 }
 
 void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, char s3, char s4) {
@@ -183,16 +189,30 @@ void eliminatorGame() {
     struct Player player;
     startGame(game, &player);
     gameover = 0;
-
+    for(int i=0 ; i<41 ; i++){
+        printString("\n", MAX_BUFFER);
+    }
+    printString("_________________________________________________________________________________________________________________\n", MAX_BUFFER);
+    printString("Score:    ", MAX_BUFFER); 
+    
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
         logic(game, &player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);
-        // printString("\b\b\b\b\b\b\b\b", 8);
-        // printString("Score:", 8); //ES BUENA LA IDEA, FALTA CEREBRO
         scoreP0++;
-
+        int oldScoreDigits = 0;
+        int aux = scoreP0;
+        for(int aux = scoreP0; aux > 0; aux /= 10){
+            oldScoreDigits++;
+        }
+        if(oldScoreDigits > 0){
+            for(int i = 0; i < oldScoreDigits; i++){
+                printChar('\b');
+            }
+        }
+        printDec(scoreP0);
         wait(100);
     }
+    clear_scr();
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
     while (getChar() != ' ') {

@@ -12,6 +12,7 @@ extern int _hlt(void);
 Color red = {30,30,255};
 Color white = {255,255,255};
 Color black = {0,0,0};
+Color blue = {255,0,0};
 
 
 const char* registers[18] = {

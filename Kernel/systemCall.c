@@ -15,6 +15,7 @@ extern int _hlt();
 extern Color RED;
 extern Color WHITE;
 extern Color BLACK;
+extern Color BLUE;
 
 int size = 0;
 

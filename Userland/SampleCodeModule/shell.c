@@ -14,29 +14,22 @@ char parameter[MAX_BUFFER+1] = {0};
 char command[MAX_BUFFER+1] = {0};
 int linePos = 0;
 char lastc;
-const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
+const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeup","sizedown"};
 
 void showCommands(){
-	printString("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
-	printString("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
-	printString("\n-clear-              limpia la pantalla",MAX_BUFFER);
-	printString("\n-inforeg-            imprime los valores de los registros",MAX_BUFFER);
-	printString("\n-sizeplus-           aumenta el tamanio de letra",MAX_BUFFER);
-	printString("\n-sizeminus-          disminuye el tamanio de letra",MAX_BUFFER);
-	printString("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
-	printString("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
+	printString("\n Comandos disponibles:",MAX_BUFFER);
+	printString("\n*clear*              Resetea la shell a su estado original",MAX_BUFFER);
+	printString("\n*eliminator*         Inicia el juego de eliminator",MAX_BUFFER);
+	printString("\n*inforeg*            Imprime los valores de los registros (CTRL + R es necesario previamente)",MAX_BUFFER);
+	printString("\n*sizeup*             Aumenta el tamanio de letra",MAX_BUFFER);
+	printString("\n*sizedown*           Disminuye el tamanio de letra",MAX_BUFFER);
+	printString("\n*time*               Imprime la hora del sistema en pantalla",MAX_BUFFER);
+	printString("\n*invopcode*          Prueba la excepcion de codigo de operacion invalido",MAX_BUFFER);
+	printString("\n*zerodiv*            Prueba de excepcion de division por cero",MAX_BUFFER);
 	printChar('\n');
 }
 
-// static Color BLACK = {0,0,0};
-// static Color WHITE = {255,255,255};
-// static Color RED = {0,0,255};
-// static Color LIGHT_BLUE = {255,255,255};
-// static Color BLUE = {255,0,0};
-// static Color ORANGE = {16,160,255};
-// static Color YELLOW = {30,224,255};
-// static Color PURPLE = {255,32,160};
-// static Color PINK = {100,0,244};
+
 
 static void newLine();
 static void printLine(char c);
@@ -67,7 +60,7 @@ void shell (){
 	};
 }
 
-static void printLine(char c){
+static void printLine(char c){ 
 	if (linePos < MAX_BUFFER && c != lastc){
 		if (isChar(c) || c == ' ' ||isDigit(c)){
 			line[linePos++] = c;
@@ -83,22 +76,22 @@ static void printLine(char c){
 }
 
 
-static void newLine(){
-	int i = checkLine();
+static void newLine(){ //aca se ejecuta el comando
+	int i = checkLine(); //buscamos el comando en el array de comandos
 
-	(*commands_ptr[i])();
+	(*commands_ptr[i])();  //ejecutamos el comando
 
-	for (int i = 0; line[i] != '\0' ; i++){
+	for (int i = 0; line[i] != '\0' ; i++){ //limpiamos los buffers
 		line[i] = 0;
 		command[i] = 0;
 		parameter[i] = 0;
 	}
-	linePos = 0;
+	linePos = 0; //reseteamos la posicion del buffer
 
-	if (i != 3 ){
-		printString("\n$ User> ",9);
+	if (i != 3 ){ //si no es clear
+		printString("\n$ User> ",9); //imprimimos el prompt en la siguiente linea
 	} else {
-		printString("$ User> ",9);
+		printString("$ User> ",9); //imprimimos el prompt
 	}
 }
 
@@ -107,23 +100,23 @@ static int checkLine(){
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	for ( j = 0 ; j < linePos && line[j] != ' ' ; j ++){
+	for ( j = 0 ; j < linePos && line[j] != ' ' ; j ++){ //aca leemos el comando, por eso si encontramos un '' salimos del for
 		command[j] = line[j];
 	}
-	if (j < linePos){
+	if (j < linePos){ //si hay un parametro
 		j++;
-		while (j < linePos){
+		while (j < linePos){ //leemos el parametro en parameter
 			parameter[k++] = line[j++];
 		}
 	}
 
-	for (i = 1 ; i < MAX_COMMANDS ; i++ ){
-		if (strcmp(command,commands[i]) == 0){
-			return i;
+	for (i = 1 ; i < MAX_COMMANDS ; i++ ){ //buscamos el comando en el array de comandos
+		if (strcmp(command,commands[i]) == 0){ //si lo encontramos
+			return i; //devolvemos la posicion en el array de comandos
 		}
 	}
 
-	return 0;
+	return 0; //si no encontramos el comando devolvemos 0
 }
 
 
@@ -159,11 +152,11 @@ static void infoRegCommand(){
 }
 
 static void invalidOpCodeCommand(){
-	test_invopcode();
+	InvalidOpCodeTest();
 }
 
 static void zeroDivisionCommand(){
-	test_zerodiv();
+	zeroDivTest();
 }
 
 static void upscaleCommand(){
@@ -173,4 +166,3 @@ static void upscaleCommand(){
 static void downscaleCommand(){
 	decreaseScale();
 }
-
