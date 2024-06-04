@@ -10,8 +10,8 @@ GLOBAL sys_fillRect
 GLOBAL sys_wait
 GLOBAL sys_inforeg
 GLOBAL sys_printmem
-GLOBAL sys_pixelMinus
-GLOBAL sys_pixelPlus
+GLOBAL syscall_pixelDown
+GLOBAL syscall_pixelUp
 GLOBAL sys_playSound
 GLOBAL sys_mute
 section .text
@@ -84,17 +84,17 @@ sys_inforeg:
     int 80h
     ret
 
-sys_printmem: 
-    mov rax, 0x0B
-    int 80h
+sys_printmem:
+    mov rax, 0x0B ;syscall
+    int 80h ;interrupcion
     ret
 
-sys_pixelPlus: 
+syscall_pixelUp: 
     mov rax, 0x0C
     int 80h
     ret
 
-sys_pixelMinus: 
+syscall_pixelDown: 
     mov rax, 0x0D
     int 80h
     ret

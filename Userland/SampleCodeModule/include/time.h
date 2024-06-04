@@ -13,4 +13,6 @@ uint64_t getSeconds();
 
 void display_time();
 
+void sleep(int millis);
+
 #endif

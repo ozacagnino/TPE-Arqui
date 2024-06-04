@@ -9,9 +9,9 @@ void keyboard_handler(uint8_t keyPressed);
 char getCharFromKeyboard();
 
 /* Returns the scanCode -> use for keys that are not characters */
-unsigned char getScanCode();
+unsigned char getKeyCode();
 
 /* Clears the scancode */
-void clearScanCode();
+void clearKeyCode();
 
 #endif

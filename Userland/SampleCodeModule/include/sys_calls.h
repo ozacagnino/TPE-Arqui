@@ -29,9 +29,9 @@ uint64_t sys_scrWidth();
 
 uint64_t sys_wait(uint64_t ms);
 
-uint64_t sys_pixelPlus();
+uint64_t syscall_pixelUp();
 
-uint64_t sys_pixelMinus();
+uint64_t syscall_pixelDown();
 
 uint64_t sys_playSound(uint32_t frequence);
 

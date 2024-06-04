@@ -2,7 +2,7 @@
 #include "time.h"
 #include <stdint.h>
 
-unsigned char scanCode = 0;
+unsigned char keyCode = 0;
 static char retChar = 0;
 static int shift = 0 ;
 static int capsLock = 0;
@@ -22,12 +22,12 @@ static const char hexMapPressed[256] = {
 
 /*
  * 29: left cntrl
- * 42: left shift
- * 54: right shift
+ * 42: left shift 0x2A
+ * 54: right shift 0x36
  * 55: no tengo numpad
  * 56: left alt
- * 58: caps lock
- * 59 - 68: F1-F10
+ * 58: caps lock 0x3A
+ * 59 - 68: F1-F103
  * 69: numLock
  * 70: scrollLock
  *
@@ -38,55 +38,38 @@ static const char hexMapPressed[256] = {
  */
 
 
-void keyboard_handler(uint8_t keyPressed) {
-    scanCode = keyPressed;
+void keyboard_handler(uint8_t keyPressed) { 
+    keyCode = keyPressed;
 
+    //capsLock
+    if (keyCode == 0x3A) {
+        capsLock = 1 - capsLock;
+    }
     //shift pressed
-    if (scanCode == 0x2A || scanCode == 0x36){
+    if (keyCode == 0x2A || keyCode == 0x36){
         shift = 1;
     }
     //shift not pressed
-    if (scanCode == 0xAA || scanCode == 0xB6) {
+    if (keyCode == 0xAA || keyCode == 0xB6) {
         shift = 0;
     }
-    //capsLock
-    if (scanCode == 0x3A) {
-        capsLock = (capsLock+1)%2 ;
-    }
-
-
 }
 
 
 char getCharFromKeyboard() {
-    //soltar tecla
-    if (scanCode > 0x80 || scanCode == 0x0F){
+    if (keyCode > 0x80 || keyCode == 0x0F){ //release key
         retChar = 0;
-    } else {
-        retChar = hexMapPressed[scanCode];
+    } else { //press key
+        retChar = hexMapPressed[keyCode]; 
     }
 
-    //mayuscula
-    if ( (retChar >= 'a' && retChar <= 'z') && (shift == 1 || capsLock == 1) ){
+    if ( (retChar >= 'a' && retChar <= 'z') && (shift == 1 || capsLock == 1) ){ //paso a mayus
         return retChar - ('a'-'A');
     }
 
     return retChar;
 }
 
-void clearScanCode(){
-    scanCode = 0;
-}
-
-
-/*
-* Up: 0x48
-* Left: 0x4B
-* Right: 0x4D
-* Down: 0x50
- */
-
-
-unsigned char getScanCode(){
-    return scanCode;
+void clearKeyCode(){
+    keyCode = 0;
 }
