@@ -14,18 +14,18 @@ char parameter[MAX_BUFFER+1] = {0};
 char command[MAX_BUFFER+1] = {0};
 int linePos = 0;
 char lastc;
-const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeplus","sizeminus"};
+const char * commands[] = {"undefined","help","time","clear","eliminator","inforeg","zerodiv","invopcode","sizeup","sizedown"};
 
 void showCommands(){
-	printString("\nlista de comandos:",MAX_BUFFER);
-	printString("\n-eliminator-         inicia el juego de eliminator",MAX_BUFFER);
-	printString("\n-time-               muestra la hora actual en pantalla",MAX_BUFFER);
-	printString("\n-clear-              limpia la pantalla",MAX_BUFFER);
-	printString("\n-inforeg-            imprime los valores de los registros",MAX_BUFFER);
-	printString("\n-sizeplus-           aumenta el tamanio de letra",MAX_BUFFER);
-	printString("\n-sizeminus-          disminuye el tamanio de letra",MAX_BUFFER);
-	printString("\n-zerodiv-            testeo de excepcion de division por cero",MAX_BUFFER);
-	printString("\n-invopcode-          testeo codigo de operacion invalido",MAX_BUFFER);
+	printString("\n Comandos disponibles:",MAX_BUFFER);
+	printString("\n*clear*              Resetea la shell a su estado original",MAX_BUFFER);
+	printString("\n*eliminator*         Inicia el juego de eliminator",MAX_BUFFER);
+	printString("\n*inforeg*            Imprime los valores de los registros (CTRL + R es necesario previamente)",MAX_BUFFER);
+	printString("\n*sizeup*             Aumenta el tamanio de letra",MAX_BUFFER);
+	printString("\n*sizedown*           Disminuye el tamanio de letra",MAX_BUFFER);
+	printString("\n*time*               Imprime la hora del sistema en pantalla",MAX_BUFFER);
+	printString("\n*invopcode*          Prueba la excepcion de codigo de operacion invalido",MAX_BUFFER);
+	printString("\n*zerodiv*            Prueba de excepcion de division por cero",MAX_BUFFER);
 	printChar('\n');
 }
 
@@ -152,11 +152,11 @@ static void infoRegCommand(){
 }
 
 static void invalidOpCodeCommand(){
-	test_invopcode();
+	InvalidOpCodeTest();
 }
 
 static void zeroDivisionCommand(){
-	test_zerodiv();
+	zeroDivTest();
 }
 
 static void upscaleCommand(){
@@ -166,4 +166,3 @@ static void upscaleCommand(){
 static void downscaleCommand(){
 	decreaseScale();
 }
-
