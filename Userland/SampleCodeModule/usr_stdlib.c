@@ -225,11 +225,11 @@ void zeroDivTest(){
 
 
 void increaseScale(){
-	sys_pixelPlus();
+	syscall_pixelUp();
 }
 
 void decreaseScale(){
-	sys_pixelMinus();
+	syscall_pixelDown();
 }
 
 

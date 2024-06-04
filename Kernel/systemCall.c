@@ -106,53 +106,48 @@ static uint64_t sys_printmem ( uint64_t * address ){
 }
 
 
-static uint64_t sys_pixelPlus(){
+static uint64_t syscall_pixelUp(){
     increasePixelScale();
     sys_clear();
     return 1;
 }
 
-static uint64_t sys_pixelMinus(){
+static uint64_t syscall_pixelDown(){
     decreasePixelScale();
     sys_clear();
     return 1;
 }
 
-static uint64_t sys_playSound(uint32_t frequnce){
-    startSound(frequnce);
+static uint64_t sys_playSound(uint32_t freq){
+    beep(freq);
     return 1;
 }
 
 static uint64_t sys_mute(){
-    stopSound();
+    mute();
     return 1;
 }
 
 
 
-// static uint64_t (*syscall_handlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8) = {
-//     sys_read, sys_write, sys_clear, sys_getHours, sys_getMinutes, sys_getSeconds,sys_getScrHeight, sys_getScrWidth, sys_fillRect,
-//     sys_wait, sys_inforeg,sys_printmem, sys_pixelPlus, sys_pixelMinus
-// };
-
-//los void los pongo sino me tira warning
-static uint64_t (*syscall_handlers[])(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t) = {
-    (void*)sys_read, 
-    (void*)sys_write, 
-    (void*)sys_clear, 
-    (void*)sys_getHours, 
-    (void*)sys_getMinutes,
-    (void*)sys_getSeconds, 
-    (void*)sys_getScrHeight, 
-    (void*)sys_getScrWidth, 
-    (void*)sys_fillRect,
-    (void*)sys_wait,
-    (void*)sys_inforeg, 
-    (void*)sys_printmem, 
-    (void*)sys_pixelPlus, 
-    (void*)sys_pixelMinus, 
-    (void*)sys_playSound, 
-    (void*)sys_mute
+//por que sin el void tira warnings?
+static uint64_t (*syscall_handlers[])(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8) = {
+    (void*)sys_read, //0
+    (void*)sys_write, //1
+    (void*)sys_clear,  //2
+    (void*)sys_getHours, //3
+    (void*)sys_getMinutes, //4
+    (void*)sys_getSeconds, //5
+    (void*)sys_getScrHeight, //6
+    (void*)sys_getScrWidth, //7
+    (void*)sys_fillRect, //8
+    (void*)sys_wait, //9
+    (void*)sys_inforeg, //10
+    (void*)sys_printmem, //11 
+    (void*)syscall_pixelUp, //12
+    (void*)syscall_pixelDown, //13
+    (void*)sys_playSound, //14
+    (void*)sys_mute //15
 };
 
 
@@ -162,6 +157,57 @@ uint64_t syscall_handler(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
     if (rax < SYS_CALLS_QTY && syscall_handlers[rax] != 0){
         return syscall_handlers[rax](rdi, rsi, rdx, r10, r8);
     }
-
     return 0;
 }
+
+
+
+//la idea realmente fue hacerlo de esta forma con una sola funcion pero no pudimos hacer que funcione el sys_fillRect con el color, 
+//ya que no nos permitia castear el r8 a tipo Color. Por eso veran un comentario en el case 8, explicando lo que queriamos hacer.
+
+// uint64_t syscall_handler(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
+//     if (rax >= SYS_CALLS_QTY) {
+//         return 0;
+//     }
+
+//     switch (rax) {
+//         case 0:
+//             return sys_read(rdi, (char *)rsi);
+//         case 1:
+//             return sys_write(rdi, (char)rsi);
+//         case 2:
+//             return sys_clear();
+//         case 3:
+//             return sys_getHours();
+//         case 4:
+//             return sys_getMinutes();
+//         case 5:
+//             return sys_getSeconds();
+//         case 6:
+//             return sys_getScrHeight();
+//         case 7:
+//             return sys_getScrWidth();
+//         case 8:
+//             // sys_fillRect((int)rdi, (int)rsi, (int)rdx, (int)r10, (Color)r8);
+//             // return 0;
+//         case 9:
+//             sys_wait((int)rdi);
+//             return 0;
+//         case 10:
+//             return sys_inforeg((uint64_t *)rdi);
+//         case 11:
+//             return sys_printmem((uint64_t *)rdi);
+//         case 12:
+//             return syscall_pixelUp();
+//         case 13:
+//             return syscall_pixelDown();
+//         case 14:
+//             return sys_playSound((uint32_t)rdi);
+//         case 15:
+//             return sys_mute();
+//         default:
+//             return 0;
+//     }
+// }
+
+

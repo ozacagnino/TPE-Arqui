@@ -7,5 +7,6 @@ int ticks_elapsed();
 int seconds_elapsed();
 int ms_elapsed();
 void timer_wait(int delta);
+void sleep(int millis);
 
 #endif

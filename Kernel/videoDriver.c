@@ -43,10 +43,12 @@ struct vbe_mode_info_structure {
 
 struct vbe_mode_info_structure* screenInfo = (void*)0x5C00;
 
+///////////// 
 Color RED = {30,30,255};
 Color WHITE = {255,255,255};
 Color BLACK = {0,0,0};
 Color BLUE = {255,0,0};
+/////////////
 
 /* draws a char in screen in the given coordinates, then sets the coordinates where the next char should be drawn */
 static void drawChar (int x, int y, unsigned char c,Color fntColor, Color bgColor);

@@ -20,7 +20,7 @@ extern uint8_t endOfKernel;
 
 extern void _hlt();
 
-static const uint64_t PageSize = 0x1000;
+static const uint64_t PageSize = 0x1000; //4K
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
@@ -44,7 +44,6 @@ void * getStackBase()
 
 void * initializeKernelBinary()
 {
-	// char buffer[10];
 	void * moduleAddresses[] = {
 		sampleCodeModuleAddress,
 		sampleDataModuleAddress
@@ -59,12 +58,12 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	load_idt();
+	load_idt(); // Carga la IDT
 	
-	clearScanCode();
-    ((EntryPoint)sampleCodeModuleAddress)();
+	clearKeyCode(); // Limpia el buffer de teclado
+    ((EntryPoint)sampleCodeModuleAddress)(); // Llama a la funcion principal del modulo de codigo	
 
-    while(1) _hlt();
+    while(1) _hlt(); // Hace un halt del procesador
     return 0;
 }
 

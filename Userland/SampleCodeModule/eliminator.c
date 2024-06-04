@@ -1,7 +1,8 @@
-#include "eliminator.h"
+#include <eliminator.h>
 #include <usr_stdlib.h>
 #include <colores.h>
-#include "sys_calls.h"
+#include <sys_calls.h>
+#include <sound.h>
 
 
 #define WIDTH 40
@@ -70,7 +71,7 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
             // } 
             // paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             
-            if (game[i][j] == player->symbol) { //COSA NUEVA, CHEQUEENLO
+            if (game[i][j] == player->symbol) { //COSA NUEVA, CHEQUEENLO //// LO ACABO DE CHEQUEAR Y NO PARECE TENER CONFLICTO CON NADA
                 currentColor = player->playerColor;
                 paintRectangle(j * PIXELWIDTH, i * PIXELHEIGHT, PIXELWIDTH - 1, PIXELHEIGHT - 1, currentColor);
             } 
@@ -80,7 +81,7 @@ void printBoard(char game[HEIGHT][WIDTH], struct Player *player) {
 
 void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     player->direction = PLAYER1_RIGHT;
-    player->symbol = '#';
+    player->symbol = '1';
     player->playerColor = BLUE;
     player->posX = WIDTH / 2;
     player->posY = HEIGHT / 2;
@@ -157,17 +158,14 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
         gameover = 1;
         player->playerColor = BLACK;
         if(playersAmount == 2){
-            if(player->symbol == '#'){
+            if(player->symbol == '1'){
                 scoreP2++;
-            }else if(player->symbol == '@'){
+            }else if(player->symbol == '2'){
                 scoreP1++;
             }
         }
     }
 
-
-    sys_playSound(1500);
-    sys_mute();
 
 
     if (player->alive) {
@@ -210,8 +208,12 @@ void eliminatorGame() {
             }
         }
         printDec(scoreP0);
+        // if(!(scoreP0 % 100)){
+        //     playSound(100);
+        // }
         wait(100);
     }
+    sys_playSound(100);
     clear_scr();
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);
@@ -224,7 +226,7 @@ void eliminatorGame() {
 
 
 
-/////////////////////////////////////////////////////// MODO 2 JUGADORES //////////////////////////////////////////////////////
+/* MODO 2 JUGADORES */
 
 
 struct Player player1;
@@ -232,7 +234,7 @@ struct Player player2;
 
 void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct Player *player2) {
     player1->direction = PLAYER1_DOWN;
-    player1->symbol = '#';
+    player1->symbol = '1';
     player1->playerColor = BLUE;
     player1->posX = WIDTH / 4;
     player1->posY = HEIGHT / 4;
@@ -240,7 +242,7 @@ void startGame2Players(char game[HEIGHT][WIDTH], struct Player *player1, struct 
     player1->length = 2;
 
     player2->direction = PLAYER2_UP;
-    player2->symbol = '@';
+    player2->symbol = '2';
     player2->playerColor = ORANGE;
     player2->posX = 3 * WIDTH / 4;
     player2->posY = 3 * HEIGHT / 4;

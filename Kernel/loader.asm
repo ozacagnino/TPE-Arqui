@@ -14,7 +14,7 @@ hang:
 	hlt	; halt machine should kernel return
 	jmp hang
 
-reset:
+reset: 
 	call getStackBase
 	mov rsp, rax
 	call main
