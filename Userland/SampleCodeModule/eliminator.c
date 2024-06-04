@@ -88,7 +88,6 @@ void startGame(char game[HEIGHT][WIDTH], struct Player *player) {
     player->length = 5;
 
     game[player->posY][player->posX] = player->symbol;
-    printString("Score:", 8);
     int i, j;
     for (i = 0; i < HEIGHT - 2; i++) {
         for (j = 0; j < WIDTH; j++) {
@@ -176,7 +175,6 @@ void gameLogic(char game[HEIGHT][WIDTH], struct Player * player, char s1, char s
         fillCell(game, player->posY, player->posX, player->symbol);
     }
     
- /*   */
 }
 
 void logic(char game[HEIGHT][WIDTH], struct Player *player, char s1, char s2, char s3, char s4) {
@@ -191,11 +189,11 @@ void eliminatorGame() {
     struct Player player;
     startGame(game, &player);
     gameover = 0;
-    for(int i=0 ; i<41 ; i++){//CAPAZ SE PUEDE HACER DE UNA MEJOR MANERA 
-        printString("\n", 1);
+    for(int i=0 ; i<41 ; i++){
+        printString("\n", MAX_BUFFER);
     }
-    printString("_________________________________________________________________________________________________________________\n", 120);
-    printString("Score:    ", 12); 
+    printString("_________________________________________________________________________________________________________________\n", MAX_BUFFER);
+    printString("Score:    ", MAX_BUFFER); 
     
     while (!gameover) {
         readKeyboardInput(&player,PLAYER1_UP,PLAYER1_DOWN,PLAYER1_LEFT,PLAYER1_RIGHT);

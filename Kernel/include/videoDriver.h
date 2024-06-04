@@ -13,6 +13,7 @@ typedef struct {
 extern Color RED;
 extern Color WHITE;
 extern Color BLACK;
+extern Color BLUE;
 
 
 //////////////
