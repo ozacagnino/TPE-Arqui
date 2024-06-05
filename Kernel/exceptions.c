@@ -42,7 +42,7 @@ void exception_handler(int exception, const uint64_t register_data[17]) { // 17 
 		videoDriver_prints("invalid op code detected\n", white, black);
 	}
 
-	for (int i = 0; i < 16; i++) { // 16 registros
+	for (int i = 0; i < 18; i++) { // 16 registros
         videoDriver_prints(registers[i],white,black); // nombre del registro
         videoDriver_prints(": ",white,black); // separador
         uint64ToHex(register_data[i], buf+2); // valor del registro
