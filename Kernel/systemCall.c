@@ -79,15 +79,20 @@ static void sys_wait (int ms){
     }
 }
 
+//  Si capture == 1, captura los registros en inforeg.
+//  Si capture == 0, devuelve el ultimo estado capturado en inforeg.
 static uint64_t sys_inforeg(uint64_t registers[17], int capture){
     if(!capture && !hasInforeg) return hasInforeg;
+    
     if(capture){
         capture_all_registers();
+        return 1;
     }
+
     for(uint8_t i=0; i<17; i++){
         registers[i] = inforeg[i];
     }
-    return hasInforeg;
+    return 1;
 }
 
 static uint64_t sys_printmem ( uint64_t * address ){

@@ -19,7 +19,7 @@ GLOBAL capture_all_registers
 EXTERN timer_handler
 EXTERN keyboard_handler
 EXTERN syscall_handler
-EXTERN exception_handler
+EXTERN handle_exception
 EXTERN videoDriver_newLine
 
 SECTION .text
@@ -151,11 +151,15 @@ capture_all_registers:
 	add rax, 160 ;120 del popstate + 40 de la excepcion
 	mov [inforeg+8*8], rax ;RSP (actualizado)
 
+	mov rax, [rsp+15*8] 
+	mov [inforeg], rax ;RIP
+	
 	mov rax, [rsp+14*8] ;RFLAGS
 	mov [inforeg+1*8], rax ;
 	
-	mov rax, [rsp+15*8] 
-	mov [inforeg], rax ;RIP
+
+	mov byte [hasInforeg], 1 ;seteamos el flag ya que se hizo el dump de los registros (la funcion hasReg se fija si esta en 1)
+
 	ret
 
 interrupt_keyboard: ;interrupcion del teclado
@@ -229,39 +233,29 @@ interrupt_timerTick:
 	popState
 	iretq
 
-
-
-exception_invalidOpCode:
-	saveRegisters
-	mov rdi, 06h ;indice de la excepcion
-	mov rsi, regdata_exc 
-	call exception_handler ;llamada a la funcion que maneja las excepciones (en C)
-
-
-exception_divideByZero:
-	saveRegisters
-
-	mov rdi, 00h ;en rdi va el primer parametro por convencion (el indice 0 de la excepcion en este caso)
-	mov rsi, regdata_exc ;en rsi va el segundo (la direccion de memoria donde se guardaron los registros)
-	call exception_handler ;llamada a la funcion que maneja las excepciones (en C)
-
-; syscalls params:	RDI	RSI	RDX	R10	R8	RAX
-; C 	params   :	RDI RSI RDX RCX R8  R9
 interrupt_syscall:
 	mov rcx, r10
 	mov r9, rax
 	call syscall_handler
 	iretq
 
-
-
-
 haltcpu:
 	cli
 	hlt
 	ret
 
+exception_invalidOpCode:
+	saveRegisters
+	mov rdi, 06h
+	mov rsi, regdata_exc 
+	call handle_exception
 
+exception_divideByZero:
+	saveRegisters
+
+	mov rdi, 00h
+	mov rsi, regdata_exc 
+	call handle_exception 
 
 SECTION .bss
 	aux resq 1

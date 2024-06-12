@@ -51,5 +51,7 @@ void increaseScale();
 
 void decreaseScale();
 
+void captureRegisters();
+
 
 #endif

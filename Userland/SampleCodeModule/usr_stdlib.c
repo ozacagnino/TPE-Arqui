@@ -6,6 +6,8 @@
 #define STDOUT 1
 #define STDERR 2
 
+#define CANT_REGISTERS 18
+
 static char buffer[64] = { '0' };
 
 int scr_height;
@@ -111,8 +113,6 @@ void printBin(uint64_t value){
 }
 
 
-
-
 static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
     char *p = buffer;
     char *p1, *p2;
@@ -185,9 +185,11 @@ static void uint64ToHex(uint64_t n, char buf[16]) {
     } while(i-- != 0);
 }
 
-// actualizar todos los llamados a inforeg para q le pasen el capture!!
-// agregar un llamado a inforeg afuera del while de eliminator
-// actualizar el usr_stdlib.h con el nuevo prototipo
+void captureRegisters(){
+	uint64_t registers[17];
+	sys_inforeg(registers, 1);
+}
+
 void inforeg(int capture){
 	char hexbuf[19];
     hexbuf[0] = '0';
