@@ -14,6 +14,7 @@ GLOBAL interrupt_syscall
 GLOBAL regdata_exc
 GLOBAL inforeg
 GLOBAL hasInforeg
+GLOBAL capture_all_registers
 
 EXTERN timer_handler
 EXTERN keyboard_handler
@@ -129,7 +130,33 @@ picSlaveMask: ;mascara de interrupciones
 
 
 
+capture_all_registers:
+	mov [inforeg+2*8], rbx ;guardamos los registros
+	mov [inforeg+3*8], rcx
+	mov [inforeg+4*8], rdx
+	mov [inforeg+5*8], rsi
+	mov [inforeg+6*8], rdi
+	mov [inforeg+7*8], rbp
+	mov [inforeg+8*8], rsp
+	mov [inforeg+9*8], r8
+	mov [inforeg+10*8], r9
+	mov [inforeg+11*8], r10
+	mov [inforeg+12*8], r11
+	mov [inforeg+13*8], r12
+	mov [inforeg+14*8], r13
+	mov [inforeg+15*8], r14
+	mov [inforeg+16*8], r15
 
+	mov rax, rsp
+	add rax, 160 ;120 del popstate + 40 de la excepcion
+	mov [inforeg+8*8], rax ;RSP (actualizado)
+
+	mov rax, [rsp+14*8] ;RFLAGS
+	mov [inforeg+1*8], rax ;
+	
+	mov rax, [rsp+15*8] 
+	mov [inforeg], rax ;RIP
+	ret
 
 interrupt_keyboard: ;interrupcion del teclado
 	pushState ;guardamos los registros

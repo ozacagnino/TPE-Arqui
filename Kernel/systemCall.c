@@ -11,6 +11,7 @@
 extern uint8_t hasInforeg;
 extern const uint64_t inforeg[17];
 extern int _hlt();
+extern void capture_all_registers();
 
 extern Color RED;
 extern Color WHITE;
@@ -78,11 +79,13 @@ static void sys_wait (int ms){
     }
 }
 
-static uint64_t sys_inforeg (uint64_t registers[17]){
-    if(hasInforeg){
-        for(uint8_t i=0; i<17; i++){
-            registers[i] = inforeg[i];
-        }
+static uint64_t sys_inforeg(uint64_t registers[17], int capture){
+    if(!capture && !hasInforeg) return hasInforeg;
+    if(capture){
+        capture_all_registers();
+    }
+    for(uint8_t i=0; i<17; i++){
+        registers[i] = inforeg[i];
     }
     return hasInforeg;
 }

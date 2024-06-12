@@ -40,7 +40,7 @@ int getScreenWidth();
 int getScreenHeight();
 void paintRectangle(int x, int y, int x2, int y2, Color color);
 void wait(uint64_t ms);
-void inforeg();
+void inforeg(int capture);
 void InvalidOpCodeTest();
 void zeroDivTest();
 //void sizePlus();

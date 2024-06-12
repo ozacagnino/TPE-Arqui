@@ -185,14 +185,17 @@ static void uint64ToHex(uint64_t n, char buf[16]) {
     } while(i-- != 0);
 }
 
-void inforeg(){
+// actualizar todos los llamados a inforeg para q le pasen el capture!!
+// agregar un llamado a inforeg afuera del while de eliminator
+// actualizar el usr_stdlib.h con el nuevo prototipo
+void inforeg(int capture){
 	char hexbuf[19];
     hexbuf[0] = '0';
     hexbuf[1] = 'x';
     hexbuf[18] = '\0';
 
 	uint64_t registers[17];
-	int i = sys_inforeg(registers);
+	int i = sys_inforeg(registers, capture);
 
 	printChar('\n');	
 	if (i == 1){

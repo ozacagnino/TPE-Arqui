@@ -39,7 +39,7 @@ uint64_t sys_mute();
 
 uint64_t sys_fillRect (int x, int y, int x2, int y2, Color color);
 
-uint64_t sys_inforeg(uint64_t reg[17]);
+uint64_t sys_inforeg(uint64_t reg[17], int capture);
 
 uint64_t sys_printmem(uint64_t mem);
 

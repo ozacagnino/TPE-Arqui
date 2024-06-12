@@ -206,6 +206,8 @@ void eliminatorGame() {
         printDec(scoreP0);
         wait(100);
     }
+    inforeg(1);
+
     deadSound();
     
     clear_scr();
@@ -314,6 +316,7 @@ void eliminatorGame2Players() {
         wait(100);
 
     }
+    inforeg(1);
     deadSound();
     paintRectangle(0, 0, getScreenWidth() / 2, getScreenHeight() / 8, BLACK);
     printString("\nGame Over. Presione espacio para salir\n", MAX_BUFFER);

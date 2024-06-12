@@ -148,7 +148,8 @@ static void clearCommand(){
 }
 
 static void infoRegCommand(){
-	inforeg();
+	// Le pasamos cero para que imprima unicamente lo que este capturado (o nada)
+	inforeg(0);
 }
 
 static void invalidOpCodeCommand(){
